@@ -72,10 +72,10 @@ export interface DeliveryStats {
   currency: string;
 }
 
-// ✅ SlickText API Configuration
+// ✅ SlickText API v2 Configuration
 export interface SlickTextConfig {
-  apiKey: string;
-  accountId: string;
+  apiKey: string; // This will be the public key for API v2
+  accountId: string; // This will be the brand ID for API v2
   baseUrl: string;
   sandboxMode: boolean;
 }

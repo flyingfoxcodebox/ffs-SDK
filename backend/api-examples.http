@@ -1,0 +1,555 @@
+# Flying Fox Solutions - Backend API Boilerplate
+# API Examples for Testing
+
+# ============================================================================
+# Environment Variables
+# ============================================================================
+
+@baseUrl = http://localhost:3001
+@apiPrefix = /api
+@authToken = your_jwt_token_here
+
+# ============================================================================
+# Health Check
+# ============================================================================
+
+GET {{baseUrl}}/health
+Content-Type: application/json
+
+###
+
+# ============================================================================
+# Authentication Routes
+# ============================================================================
+
+### User Signup
+POST {{baseUrl}}{{apiPrefix}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "SecurePass123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "role": "user"
+}
+
+###
+
+### User Login
+POST {{baseUrl}}{{apiPrefix}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "SecurePass123"
+}
+
+###
+
+### Refresh Token
+POST {{baseUrl}}{{apiPrefix}}/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "your_refresh_token_here"
+}
+
+###
+
+### Request Password Reset
+POST {{baseUrl}}{{apiPrefix}}/auth/request-password-reset
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+###
+
+### Reset Password
+POST {{baseUrl}}{{apiPrefix}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset_token_here",
+  "newPassword": "NewSecurePass123"
+}
+
+###
+
+### Get User Profile
+GET {{baseUrl}}{{apiPrefix}}/auth/profile
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Update User Profile
+PUT {{baseUrl}}{{apiPrefix}}/auth/profile
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "email": "john.smith@example.com"
+}
+
+###
+
+### Change Password
+POST {{baseUrl}}{{apiPrefix}}/auth/change-password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "SecurePass123",
+  "newPassword": "NewSecurePass123"
+}
+
+###
+
+### Logout
+POST {{baseUrl}}{{apiPrefix}}/auth/logout
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# ============================================================================
+# Billing Routes
+# ============================================================================
+
+### Get Subscription Plans
+GET {{baseUrl}}{{apiPrefix}}/billing/plans
+Content-Type: application/json
+
+###
+
+### Process Checkout
+POST {{baseUrl}}{{apiPrefix}}/billing/checkout
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "planId": "plan_pro",
+  "email": "user@example.com",
+  "paymentMethod": {
+    "type": "card",
+    "last4": "4242",
+    "brand": "visa",
+    "expiryMonth": 12,
+    "expiryYear": 2025
+  },
+  "customerInfo": {
+    "name": "John Doe",
+    "email": "user@example.com"
+  }
+}
+
+###
+
+### Get Current Subscription
+GET {{baseUrl}}{{apiPrefix}}/billing/subscription
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Update Subscription
+PUT {{baseUrl}}{{apiPrefix}}/billing/subscription
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "planId": "plan_enterprise"
+}
+
+###
+
+### Cancel Subscription
+DELETE {{baseUrl}}{{apiPrefix}}/billing/subscription/sub_1234567890
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Get Billing History
+GET {{baseUrl}}{{apiPrefix}}/billing/history
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Get Payment Methods
+GET {{baseUrl}}{{apiPrefix}}/billing/payment-methods
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Add Payment Method
+POST {{baseUrl}}{{apiPrefix}}/billing/payment-methods
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "paymentMethod": {
+    "type": "card",
+    "last4": "4242",
+    "brand": "visa",
+    "expiryMonth": 12,
+    "expiryYear": 2025
+  }
+}
+
+###
+
+### Stripe Webhook
+POST {{baseUrl}}{{apiPrefix}}/billing/webhooks/stripe
+Content-Type: application/json
+Stripe-Signature: your_stripe_signature_here
+
+{
+  "id": "evt_1234567890",
+  "type": "payment_intent.succeeded",
+  "data": {
+    "object": {
+      "id": "pi_1234567890",
+      "amount": 2999,
+      "currency": "usd",
+      "status": "succeeded"
+    }
+  }
+}
+
+###
+
+# ============================================================================
+# Messaging Routes
+# ============================================================================
+
+### Send SMS
+POST {{baseUrl}}{{apiPrefix}}/messaging/send
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "content": "Hello! This is a test message from Flying Fox Solutions.",
+  "recipients": ["+1234567890", "+0987654321"],
+  "campaignName": "Test Campaign"
+}
+
+###
+
+### Get Message Status
+GET {{baseUrl}}{{apiPrefix}}/messaging/messages/msg_1234567890/status
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Get Message History
+GET {{baseUrl}}{{apiPrefix}}/messaging/messages/history?limit=50&offset=0
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Upload Contacts
+POST {{baseUrl}}{{apiPrefix}}/messaging/contacts/upload
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "contacts": [
+    {
+      "phone": "+1234567890",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "tags": ["customer", "premium"]
+    },
+    {
+      "phone": "+0987654321",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane@example.com",
+      "tags": ["customer"]
+    }
+  ]
+}
+
+###
+
+### Get Contacts
+GET {{baseUrl}}{{apiPrefix}}/messaging/contacts?limit=50&offset=0&tags=customer,premium
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Add Contact
+POST {{baseUrl}}{{apiPrefix}}/messaging/contacts
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "phone": "+1234567890",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "tags": ["customer"]
+}
+
+###
+
+### Create Campaign
+POST {{baseUrl}}{{apiPrefix}}/messaging/campaigns
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Holiday Sale Campaign",
+  "content": "Get 20% off your next purchase! Use code HOLIDAY20. Valid until Dec 31st.",
+  "recipients": ["+1234567890", "+0987654321"],
+  "scheduledFor": "2024-12-01T10:00:00Z"
+}
+
+###
+
+### Get Campaigns
+GET {{baseUrl}}{{apiPrefix}}/messaging/campaigns?limit=50&offset=0
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Create Auto-Reply
+POST {{baseUrl}}{{apiPrefix}}/messaging/auto-replies
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "keyword": "HELP",
+  "message": "Thank you for contacting us! For support, please email support@example.com or call 1-800-HELP-NOW.",
+  "isActive": true
+}
+
+###
+
+### Get Auto-Replies
+GET {{baseUrl}}{{apiPrefix}}/messaging/auto-replies
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Get Account Balance
+GET {{baseUrl}}{{apiPrefix}}/messaging/account/balance
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### SlickText Webhook
+POST {{baseUrl}}{{apiPrefix}}/messaging/webhooks/slicktext
+Content-Type: application/json
+X-SlickText-Signature: your_slicktext_signature_here
+
+{
+  "id": "evt_1234567890",
+  "type": "message.delivered",
+  "data": {
+    "message_id": "msg_1234567890",
+    "status": "delivered",
+    "recipient": "+1234567890"
+  }
+}
+
+###
+
+# ============================================================================
+# POS Routes
+# ============================================================================
+
+### Get Products
+GET {{baseUrl}}{{apiPrefix}}/pos/products?limit=50&offset=0&category=beverages&search=coffee
+Content-Type: application/json
+
+###
+
+### Get Product by ID
+GET {{baseUrl}}{{apiPrefix}}/pos/products/product_1
+Content-Type: application/json
+
+###
+
+### Get Inventory Status
+GET {{baseUrl}}{{apiPrefix}}/pos/inventory
+Content-Type: application/json
+
+###
+
+### Create Order
+POST {{baseUrl}}{{apiPrefix}}/pos/orders
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product": {
+        "id": "product_1",
+        "name": "Coffee - Espresso",
+        "price": 2.50
+      },
+      "quantity": 2,
+      "notes": "Extra hot"
+    },
+    {
+      "product": {
+        "id": "product_2",
+        "name": "Croissant",
+        "price": 3.25
+      },
+      "quantity": 1
+    }
+  ],
+  "customerInfo": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1234567890"
+  },
+  "discountCode": "SAVE10",
+  "paymentMethod": {
+    "type": "card",
+    "last4": "4242",
+    "brand": "visa"
+  }
+}
+
+###
+
+### Get Order by ID
+GET {{baseUrl}}{{apiPrefix}}/pos/orders/order_1234567890
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Get Orders
+GET {{baseUrl}}{{apiPrefix}}/pos/orders?limit=50&offset=0
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Update Order Status
+PUT {{baseUrl}}{{apiPrefix}}/pos/orders/order_1234567890/status
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+###
+
+### Get Order Analytics
+GET {{baseUrl}}{{apiPrefix}}/pos/analytics?startDate=2024-01-01&endDate=2024-12-31
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Update Inventory
+PUT {{baseUrl}}{{apiPrefix}}/pos/inventory/product_1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "quantity": 10,
+  "operation": "add"
+}
+
+###
+
+# ============================================================================
+# Test Scenarios
+# ============================================================================
+
+### Complete POS Order Flow
+# 1. Get products
+GET {{baseUrl}}{{apiPrefix}}/pos/products
+Content-Type: application/json
+
+###
+
+# 2. Create order
+POST {{baseUrl}}{{apiPrefix}}/pos/orders
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product": {
+        "id": "product_1",
+        "name": "Coffee - Espresso",
+        "price": 2.50
+      },
+      "quantity": 1
+    }
+  ],
+  "paymentMethod": {
+    "type": "cash"
+  }
+}
+
+###
+
+# 3. Check order status
+GET {{baseUrl}}{{apiPrefix}}/pos/orders/order_1234567890
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+### Complete Messaging Flow
+# 1. Upload contacts
+POST {{baseUrl}}{{apiPrefix}}/messaging/contacts/upload
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "contacts": [
+    {
+      "phone": "+1234567890",
+      "firstName": "Test",
+      "lastName": "User"
+    }
+  ]
+}
+
+###
+
+# 2. Send SMS
+POST {{baseUrl}}{{apiPrefix}}/messaging/send
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "content": "Test message from API",
+  "recipients": ["+1234567890"]
+}
+
+###
+
+# 3. Check message status
+GET {{baseUrl}}{{apiPrefix}}/messaging/messages/msg_1234567890/status
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
