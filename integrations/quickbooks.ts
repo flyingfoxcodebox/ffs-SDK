@@ -1,6 +1,6 @@
 /**
  * Flying Fox Solutions - QuickBooks Integration
- * 
+ *
  * Placeholder for QuickBooks accounting integration service.
  */
 
