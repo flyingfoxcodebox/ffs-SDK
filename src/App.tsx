@@ -11,6 +11,9 @@ import AuthPanel, {
   type SignUpData,
   type PasswordResetData,
 } from "@ffx/components/blueprints/auth/AuthPanel";
+import CheckoutPanel, {
+  type SubscriptionPlan,
+} from "@ffx/components/blueprints/billing/CheckoutPanel";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -20,6 +23,7 @@ const handleLogin: HandleLogin = async (email, password) => {
 export default function App() {
   const [view] = useState<"login" | "signup" | "reset">("login");
   const [showAuthPanel, setShowAuthPanel] = useState(false);
+  const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +42,55 @@ export default function App() {
       show: boolean;
     }>
   >([]);
+
+  // ✅ Sample subscription plans
+  const samplePlans: SubscriptionPlan[] = [
+    {
+      id: "starter",
+      name: "Starter",
+      price: 0,
+      description: "Perfect for individuals getting started",
+      billingCycle: "monthly",
+      features: [
+        "Up to 3 projects",
+        "Community support",
+        "Basic templates",
+        "1GB storage",
+      ],
+    },
+    {
+      id: "professional",
+      name: "Professional",
+      price: 19.99,
+      description: "Ideal for professionals and small teams",
+      billingCycle: "monthly",
+      features: [
+        "Unlimited projects",
+        "Priority email support",
+        "Advanced templates",
+        "10GB storage",
+        "Team collaboration",
+        "Analytics dashboard",
+      ],
+      popular: true,
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise",
+      price: 49.99,
+      description: "For growing businesses and teams",
+      billingCycle: "monthly",
+      features: [
+        "Everything in Professional",
+        "Dedicated account manager",
+        "Custom integrations",
+        "Unlimited storage",
+        "Advanced security",
+        "API access",
+        "White-label options",
+      ],
+    },
+  ];
 
   // ✅ AuthPanel callback handlers
   const handleAuthLogin = async (data: LoginData) => {
@@ -61,6 +114,24 @@ export default function App() {
   const handleAuthRedirect = (path: string) => {
     console.log("AuthPanel Redirect to:", path);
     // In a real app, you would navigate to the path
+  };
+
+  // ✅ CheckoutPanel callback handlers
+  const handleCheckout = async (
+    planId: string,
+    email: string,
+    paymentMethod: string
+  ) => {
+    console.log("CheckoutPanel Checkout:", { planId, email, paymentMethod });
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Simulate success/failure for demo
+    if (Math.random() > 0.2) {
+      console.log("✅ Checkout successful!");
+    } else {
+      throw new Error("Payment processing failed. Please try again.");
+    }
   };
 
   if (showAuthPanel) {
@@ -87,6 +158,33 @@ export default function App() {
     );
   }
 
+  if (showCheckoutPanel) {
+    return (
+      <main className="min-h-screen bg-gray-100 dark:bg-gray-950 p-6">
+        <div className="max-w-6xl mx-auto">
+          <CheckoutPanel
+            plans={samplePlans}
+            onCheckout={handleCheckout}
+            currency="$"
+            testMode={true}
+            title="Choose Your Plan"
+            subtitle="Select a subscription plan that fits your needs"
+            showSummary={true}
+          />
+
+          <div className="mt-8 text-center">
+            <Button
+              variant="secondary"
+              onClick={() => setShowCheckoutPanel(false)}
+            >
+              Back to Component Demos
+            </Button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
       {view === "login" && (
@@ -98,22 +196,47 @@ export default function App() {
         />
       )}
 
-      {/* 🚀 AuthPanel Blueprint Demo */}
-      <div className="mt-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          🚀 AuthPanel Blueprint Demo
+      {/* 🚀 Blueprint Demos */}
+      <div className="mt-8 text-center space-y-8">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          🚀 Blueprint Components Demo
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Complete authentication flow combining all atomic components
-        </p>
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={() => setShowAuthPanel(true)}
-          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-        >
-          Try AuthPanel Blueprint
-        </Button>
+
+        {/* AuthPanel Demo */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            🔐 AuthPanel Blueprint
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Complete authentication flow combining all atomic components
+          </p>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setShowAuthPanel(true)}
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+          >
+            Try AuthPanel Blueprint
+          </Button>
+        </div>
+
+        {/* CheckoutPanel Demo */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            💳 CheckoutPanel Blueprint
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Complete subscription checkout flow with plan selection and payment
+          </p>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setShowCheckoutPanel(true)}
+            className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+          >
+            Try CheckoutPanel Blueprint
+          </Button>
+        </div>
       </div>
 
       {/* 🧪 Test InputField and Button components */}
