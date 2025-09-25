@@ -6,6 +6,11 @@ import Modal from "@ffx/components/ui/Modal";
 import Spinner from "@ffx/components/ui/Spinner";
 import FormGroup from "@ffx/components/ui/FormGroup";
 import Toast from "@ffx/components/ui/Toast";
+import AuthPanel, {
+  type LoginData,
+  type SignUpData,
+  type PasswordResetData,
+} from "@ffx/components/blueprints/auth/AuthPanel";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -14,6 +19,7 @@ const handleLogin: HandleLogin = async (email, password) => {
 
 export default function App() {
   const [view] = useState<"login" | "signup" | "reset">("login");
+  const [showAuthPanel, setShowAuthPanel] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +39,54 @@ export default function App() {
     }>
   >([]);
 
+  // ✅ AuthPanel callback handlers
+  const handleAuthLogin = async (data: LoginData) => {
+    console.log("AuthPanel Login:", data);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const handleAuthSignUp = async (data: SignUpData) => {
+    console.log("AuthPanel SignUp:", data);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const handleAuthPasswordReset = async (data: PasswordResetData) => {
+    console.log("AuthPanel Password Reset:", data);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const handleAuthRedirect = (path: string) => {
+    console.log("AuthPanel Redirect to:", path);
+    // In a real app, you would navigate to the path
+  };
+
+  if (showAuthPanel) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-6">
+        <div className="w-full max-w-md">
+          <AuthPanel
+            onLogin={handleAuthLogin}
+            onSignUp={handleAuthSignUp}
+            onPasswordReset={handleAuthPasswordReset}
+            onRedirect={handleAuthRedirect}
+            title="Flying Fox Solutions"
+            subtitle="Complete authentication demo"
+            showRememberMe={true}
+          />
+
+          <div className="mt-8 text-center">
+            <Button variant="secondary" onClick={() => setShowAuthPanel(false)}>
+              Back to Component Demos
+            </Button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
       {view === "login" && (
@@ -43,6 +97,24 @@ export default function App() {
           subtitle="Sign in to your account"
         />
       )}
+
+      {/* 🚀 AuthPanel Blueprint Demo */}
+      <div className="mt-8 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          🚀 AuthPanel Blueprint Demo
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          Complete authentication flow combining all atomic components
+        </p>
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={() => setShowAuthPanel(true)}
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+        >
+          Try AuthPanel Blueprint
+        </Button>
+      </div>
 
       {/* 🧪 Test InputField and Button components */}
       <div className="mt-8 w-full max-w-md space-y-6">
