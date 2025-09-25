@@ -1,290 +1,256 @@
 import { useState, useEffect, useCallback } from "react";
-import { slickTextService } from "../services/slicktext";
+import { messagingApiClient } from "../services/apiClient";
 import type {
   Message,
   Contact,
   Campaign,
   AutoReply,
-  SlickTextConfig,
-  SlickTextResponse,
+  SendMessageRequest,
+  SubscribeContactRequest,
 } from "../types";
 
 /**
  * useMessaging Hook
  * ----------------
- * Main hook for messaging functionality
+ * Main hook for messaging functionality using the backend API
  */
 
-export const useMessaging = (config?: SlickTextConfig) => {
-  const [isConfigured, setIsConfigured] = useState(false);
+export const useMessaging = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [serviceStatus, setServiceStatus] = useState<{
+    usingMocks: boolean;
+    service: "mock" | "real";
+  } | null>(null);
 
-  // ✅ Update configuration
-  useEffect(() => {
-    if (config?.apiKey) {
-      slickTextService.updateConfig(config);
-      setIsConfigured(true);
-      setError(null);
-    } else {
-      setIsConfigured(false);
+  // Load service status
+  const loadServiceStatus = useCallback(async () => {
+    try {
+      const status = await messagingApiClient.getServiceStatus();
+      setServiceStatus({
+        usingMocks: status.usingMocks,
+        service: status.service,
+      });
+    } catch (err) {
+      console.error("Failed to load service status:", err);
     }
-  }, [config]);
+  }, []);
 
-  // ✅ Send message
+  // Send message
   const sendMessage = useCallback(
-    async (
-      message: string,
-      recipients: string[],
-      options?: {
-        scheduledAt?: string;
-        campaignName?: string;
-      }
-    ): Promise<SlickTextResponse> => {
-      if (!isConfigured) {
-        return {
-          success: false,
-          error: "SlickText not configured",
-        };
-      }
-
+    async (request: SendMessageRequest) => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await slickTextService.sendMessage({
-          message,
-          recipients,
-          scheduledAt: options?.scheduledAt,
-          campaignName: options?.campaignName,
-        });
+        const result = await messagingApiClient.sendMessage(request);
 
-        if (!response.success) {
-          setError(response.error || "Failed to send message");
-        }
-
-        return response;
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Unknown error";
-        setError(errorMessage);
-        return {
-          success: false,
-          error: errorMessage,
+        // Convert the result to our Message format
+        const newMessage: Message = {
+          id: result.message_id || `msg_${Date.now()}`,
+          content: request.content,
+          status: result.status || "sent",
+          recipients: result.recipients || 0,
+          sentAt: new Date(),
+          listId: request.listId,
         };
+
+        // Add to messages list
+        setMessages((prev) => [newMessage, ...prev]);
+
+        // Refresh service status to show updated stats
+        await loadServiceStatus();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
     },
-    [isConfigured]
+    [loadServiceStatus]
   );
 
-  // ✅ Upload contacts
-  const uploadContacts = useCallback(
-    async (contacts: Contact[]): Promise<SlickTextResponse> => {
-      if (!isConfigured) {
-        return {
-          success: false,
-          error: "SlickText not configured",
-        };
-      }
-
+  // Subscribe contact
+  const subscribeContact = useCallback(
+    async (request: SubscribeContactRequest) => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await slickTextService.uploadContacts(contacts);
+        const result = await messagingApiClient.subscribeContact(request);
 
-        if (!response.success) {
-          setError(response.error || "Failed to upload contacts");
-        }
+        // Refresh service status to show updated subscriber counts
+        await loadServiceStatus();
 
-        return response;
+        return result;
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Unknown error";
         setError(errorMessage);
-        return {
-          success: false,
-          error: errorMessage,
-        };
+        throw err;
       } finally {
         setLoading(false);
       }
     },
-    [isConfigured]
+    [loadServiceStatus]
   );
 
-  // ✅ Get message history
-  const getMessageHistory = useCallback(
-    async (limit = 50, offset = 0): Promise<SlickTextResponse<Campaign[]>> => {
-      if (!isConfigured) {
-        return {
-          success: false,
-          error: "SlickText not configured",
-        };
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await slickTextService.getMessageHistory(
-          limit,
-          offset
-        );
-
-        if (!response.success) {
-          setError(response.error || "Failed to fetch message history");
-        }
-
-        return response;
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Unknown error";
-        setError(errorMessage);
-        return {
-          success: false,
-          error: errorMessage,
-        };
-      } finally {
-        setLoading(false);
-      }
-    },
-    [isConfigured]
-  );
-
-  // ✅ Get contacts
-  const getContacts = useCallback(
-    async (limit = 100, offset = 0): Promise<SlickTextResponse<Contact[]>> => {
-      if (!isConfigured) {
-        return {
-          success: false,
-          error: "SlickText not configured",
-        };
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await slickTextService.getContacts(limit, offset);
-
-        if (!response.success) {
-          setError(response.error || "Failed to fetch contacts");
-        }
-
-        return response;
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Unknown error";
-        setError(errorMessage);
-        return {
-          success: false,
-          error: errorMessage,
-        };
-      } finally {
-        setLoading(false);
-      }
-    },
-    [isConfigured]
-  );
-
-  // ✅ Create auto-reply
-  const createAutoReply = useCallback(
-    async (
-      keyword: string,
-      message: string
-    ): Promise<SlickTextResponse<AutoReply>> => {
-      if (!isConfigured) {
-        return {
-          success: false,
-          error: "SlickText not configured",
-        };
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await slickTextService.createAutoReply(
-          keyword,
-          message
-        );
-
-        if (!response.success) {
-          setError(response.error || "Failed to create auto-reply");
-        }
-
-        return response;
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Unknown error";
-        setError(errorMessage);
-        return {
-          success: false,
-          error: errorMessage,
-        };
-      } finally {
-        setLoading(false);
-      }
-    },
-    [isConfigured]
-  );
-
-  // ✅ Get auto-replies
-  const getAutoReplies = useCallback(async (): Promise<
-    SlickTextResponse<AutoReply[]>
-  > => {
-    if (!isConfigured) {
-      return {
-        success: false,
-        error: "SlickText not configured",
-      };
-    }
-
+  // Get message history (mock data for now)
+  const getMessageHistory = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await slickTextService.getAutoReplies();
+      // For now, we'll use mock data since the backend doesn't have a getMessages endpoint
+      const mockMessages: Message[] = [
+        {
+          id: "msg_1",
+          content: "Welcome to our service!",
+          status: "sent",
+          recipients: 150,
+          sentAt: new Date(Date.now() - 86400000), // 1 day ago
+          listId: "list_1",
+        },
+        {
+          id: "msg_2",
+          content: "Special offer: 20% off your next order!",
+          status: "sent",
+          recipients: 89,
+          sentAt: new Date(Date.now() - 172800000), // 2 days ago
+          listId: "list_1",
+        },
+      ];
 
-      if (!response.success) {
-        setError(response.error || "Failed to fetch auto-replies");
-      }
-
-      return response;
+      setMessages(mockMessages);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
-      return {
-        success: false,
-        error: errorMessage,
-      };
     } finally {
       setLoading(false);
     }
-  }, [isConfigured]);
+  }, []);
 
-  // ✅ Calculate message cost
-  const calculateMessageCost = useCallback(
-    (message: string, recipientCount: number): number => {
-      const result = slickTextService.calculateMessageSegments(message);
-      return result.totalCost * recipientCount;
+  // Get contact lists
+  const getLists = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await messagingApiClient.getLists();
+      return response.result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Get campaign stats
+  const getCampaignStats = useCallback(async (campaignId: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await messagingApiClient.getCampaignStats(campaignId);
+      return response.result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Create auto-reply
+  const createAutoReply = useCallback(
+    async (keyword: string, message: string, isActive: boolean = true) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await messagingApiClient.createAutoReply(
+          keyword,
+          message,
+          isActive
+        );
+        return response.result;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error";
+        setError(errorMessage);
+        return null;
+      } finally {
+        setLoading(false);
+      }
     },
     []
   );
 
+  // Get account balance
+  const getAccountBalance = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await messagingApiClient.getAccountBalance();
+      return response.result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Switch to mock mode
+  const switchToMockMode = useCallback(async () => {
+    try {
+      await messagingApiClient.switchMode("mock");
+      await loadServiceStatus();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to switch to mock mode"
+      );
+    }
+  }, [loadServiceStatus]);
+
+  // Switch to real mode
+  const switchToRealMode = useCallback(async () => {
+    try {
+      await messagingApiClient.switchMode("real");
+      await loadServiceStatus();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to switch to real mode"
+      );
+    }
+  }, [loadServiceStatus]);
+
+  // Load initial data
+  useEffect(() => {
+    getMessageHistory();
+    loadServiceStatus();
+  }, [getMessageHistory, loadServiceStatus]);
+
   return {
-    isConfigured,
+    messages,
+    campaigns,
     loading,
     error,
+    serviceStatus,
     sendMessage,
-    uploadContacts,
+    subscribeContact,
     getMessageHistory,
-    getContacts,
+    getLists,
+    getCampaignStats,
     createAutoReply,
-    getAutoReplies,
-    calculateMessageCost,
+    getAccountBalance,
+    switchToMockMode,
+    switchToRealMode,
   };
 };

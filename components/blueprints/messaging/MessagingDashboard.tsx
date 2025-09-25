@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Button, Toast } from "@ffx/components/ui";
 import {
   MessageComposer,
@@ -7,7 +7,9 @@ import {
   MessageHistory,
   AutoReplyManager,
 } from "./";
-import { slickTextService } from "./services/slicktext";
+import { messagingApiClient } from "./services/apiClient";
+import { useMessaging } from "./hooks/useMessaging";
+import { useContacts } from "./hooks/useContacts";
 import type {
   MessagingDashboardProps,
   Message,
@@ -37,6 +39,10 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewMessage, setPreviewMessage] = useState<Message | null>(null);
+  const [serviceStatus, setServiceStatus] = useState<{
+    usingMocks: boolean;
+    service: "mock" | "real";
+  } | null>(null);
   const [toasts, setToasts] = useState<
     Array<{
       id: number;
@@ -45,6 +51,24 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
       show: boolean;
     }>
   >([]);
+
+  // Initialize messaging hooks
+  const {
+    messages,
+    loading: messagingLoading,
+    error: messagingError,
+    sendMessage,
+    serviceStatus: messagingServiceStatus,
+    switchToMockMode,
+    switchToRealMode,
+  } = useMessaging();
+
+  const {
+    contacts,
+    loading: contactsLoading,
+    error: contactsError,
+    subscribeContact,
+  } = useContacts();
 
   // ✅ Toast management
   const addToast = useCallback(
@@ -62,42 +86,65 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
+  // Load service status on mount
+  useEffect(() => {
+    const loadStatus = async () => {
+      try {
+        const status = await messagingApiClient.getServiceStatus();
+        setServiceStatus(status);
+      } catch (error) {
+        console.error("Failed to load service status:", error);
+      }
+    };
+    loadStatus();
+  }, []);
+
+  // Update service status when messaging service status changes
+  useEffect(() => {
+    if (messagingServiceStatus) {
+      setServiceStatus(messagingServiceStatus);
+    }
+  }, [messagingServiceStatus]);
+
+  // Handle mode switching
+  const handleSwitchMode = useCallback(
+    async (mode: "mock" | "real") => {
+      try {
+        if (mode === "mock") {
+          await switchToMockMode();
+          addToast("Switched to mock mode", "info");
+        } else {
+          await switchToRealMode();
+          addToast("Switched to real API mode", "info");
+        }
+      } catch (error) {
+        addToast("Failed to switch mode", "error");
+      }
+    },
+    [switchToMockMode, switchToRealMode, addToast]
+  );
+
   // ✅ Handle message send
   const handleSendMessage = useCallback(
     async (message: Message, recipients: Contact[]) => {
       try {
-        if (!slickTextConfig?.apiKey) {
-          addToast(
-            "SlickText configuration required. Please configure your API settings.",
-            "error"
-          );
-          return;
-        }
-
-        // Update service config
-        slickTextService.updateConfig(slickTextConfig);
-
-        // Send message via SlickText
-        const response = await slickTextService.sendMessage({
-          message: message.content,
-          recipients: recipients.map((contact) => contact.phoneNumber),
-          campaignName: `Campaign ${Date.now()}`,
+        await sendMessage({
+          content: message.content,
+          listId: "list_1", // Default list ID for now
+          scheduledFor: message.scheduledFor,
         });
 
-        if (response.success) {
-          addToast(
-            `Message sent successfully to ${recipients.length} recipients!`,
-            "success"
-          );
-        } else {
-          addToast(`Failed to send message: ${response.error}`, "error");
-        }
+        addToast(
+          `Message sent successfully to ${recipients.length} recipients!`,
+          "success"
+        );
+        setActiveSection("history");
       } catch (error) {
         console.error("Send message error:", error);
         addToast("Failed to send message. Please try again.", "error");
       }
     },
-    [slickTextConfig, addToast]
+    [sendMessage, addToast]
   );
 
   // ✅ Handle message schedule
@@ -311,12 +358,57 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            SMS Messaging Dashboard
-          </h1>
-          <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-            Send, manage, and track your SMS campaigns
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                SMS Messaging Dashboard
+              </h1>
+              <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
+                Send, manage, and track your SMS campaigns
+              </p>
+            </div>
+
+            {/* Service Status Indicator */}
+            {serviceStatus && (
+              <div className="flex items-center space-x-4">
+                <div
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                    serviceStatus.usingMocks
+                      ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                      : "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                  }`}
+                >
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      serviceStatus.usingMocks ? "bg-blue-500" : "bg-green-500"
+                    }`}
+                  />
+                  <span>
+                    {serviceStatus.usingMocks ? "Mock Mode" : "Live API"}
+                  </span>
+                </div>
+
+                <div className="flex space-x-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleSwitchMode("mock")}
+                    disabled={serviceStatus.usingMocks}
+                  >
+                    Mock
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleSwitchMode("real")}
+                    disabled={!serviceStatus.usingMocks}
+                  >
+                    Live
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Navigation */}

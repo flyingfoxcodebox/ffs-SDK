@@ -1,5 +1,10 @@
 import { useState, useCallback } from "react";
-import type { Contact, ContactUploadResult } from "../types";
+import { messagingApiClient } from "../services/apiClient";
+import type {
+  Contact,
+  ContactUploadResult,
+  SubscribeContactRequest,
+} from "../types";
 
 /**
  * useContacts Hook
@@ -276,6 +281,57 @@ export const useContacts = () => {
     [exportContactsToCSV]
   );
 
+  // ✅ Subscribe contact to list
+  const subscribeContact = useCallback(
+    async (
+      listId: string,
+      phoneNumber: string,
+      customFields?: {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+      }
+    ) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const request: SubscribeContactRequest = {
+          listId,
+          phoneNumber,
+          customFields,
+        };
+
+        const result = await messagingApiClient.subscribeContact(request);
+
+        // Create a local contact object from the result
+        const newContact: Contact = {
+          id: result.subscriber_id || `contact_${Date.now()}`,
+          phoneNumber,
+          firstName: customFields?.firstName,
+          lastName: customFields?.lastName,
+          email: customFields?.email,
+          isOptedIn: true,
+          createdAt: new Date().toISOString(),
+          tags: [],
+        };
+
+        // Add to local contacts list
+        addContact(newContact);
+
+        return result;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to subscribe contact";
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [addContact]
+  );
+
   return {
     contacts,
     selectedContacts,
@@ -299,5 +355,6 @@ export const useContacts = () => {
     getContactStats,
     exportContactsToCSV,
     downloadContactsCSV,
+    subscribeContact,
   };
 };
