@@ -5,6 +5,7 @@ import Button from "@ffx/components/ui/Button";
 import Modal from "@ffx/components/ui/Modal";
 import Spinner from "@ffx/components/ui/Spinner";
 import FormGroup from "@ffx/components/ui/FormGroup";
+import Toast from "@ffx/components/ui/Toast";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -23,6 +24,14 @@ export default function App() {
     message: "",
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [toasts, setToasts] = useState<
+    Array<{
+      id: number;
+      message: string;
+      variant: "success" | "error" | "info" | "warning";
+      show: boolean;
+    }>
+  >([]);
 
   return (
     <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
@@ -307,7 +316,218 @@ export default function App() {
             </Button>
           </div>
         </div>
+
+        {/* Toast Demo */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Toast Examples
+          </h3>
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Toast Variants
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Success! Your action was completed.",
+                      variant: "success",
+                      show: true,
+                    },
+                  ]);
+                }}
+              >
+                Success Toast
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Error! Something went wrong.",
+                      variant: "error",
+                      show: true,
+                    },
+                  ]);
+                }}
+              >
+                Error Toast
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Info: Here's some useful information.",
+                      variant: "info",
+                      show: true,
+                    },
+                  ]);
+                }}
+              >
+                Info Toast
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Warning: Please be careful!",
+                      variant: "warning",
+                      show: true,
+                    },
+                  ]);
+                }}
+              >
+                Warning Toast
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Auto-Dismiss Examples
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Quick success (3s)",
+                      variant: "success",
+                      show: true,
+                    },
+                  ]);
+                  // Auto-remove after 3 seconds
+                  setTimeout(() => {
+                    setToasts((prev) =>
+                      prev.filter((toast) => toast.id !== id)
+                    );
+                  }, 3000);
+                }}
+              >
+                Quick Success (3s)
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Long info (10s)",
+                      variant: "info",
+                      show: true,
+                    },
+                  ]);
+                  // Auto-remove after 10 seconds
+                  setTimeout(() => {
+                    setToasts((prev) =>
+                      prev.filter((toast) => toast.id !== id)
+                    );
+                  }, 10000);
+                }}
+              >
+                Long Info (10s)
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => {
+                  const id = Date.now();
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: "Manual dismiss only - click X to close",
+                      variant: "error",
+                      show: true,
+                    },
+                  ]);
+                  // No auto-remove - manual dismiss only
+                }}
+              >
+                Manual Dismiss Only
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Stack Multiple Toasts
+            </h4>
+            <Button
+              variant="primary"
+              onClick={() => {
+                const variants: Array<
+                  "success" | "error" | "info" | "warning"
+                > = ["success", "error", "info", "warning"];
+                const messages = [
+                  "First toast - success!",
+                  "Second toast - error!",
+                  "Third toast - info!",
+                  "Fourth toast - warning!",
+                ];
+
+                variants.forEach((variant, index) => {
+                  const id = Date.now() + index;
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id,
+                      message: messages[index],
+                      variant,
+                      show: true,
+                    },
+                  ]);
+                });
+              }}
+            >
+              Show 4 Stacked Toasts
+            </Button>
+          </div>
+        </div>
       </div>
+
+      {/* Toast Stack */}
+      {toasts.map((toast, index) => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          variant={toast.variant}
+          show={toast.show}
+          onDismiss={() => {
+            setToasts((prev) => prev.filter((t) => t.id !== toast.id));
+          }}
+          className={`top-${4 + index * 20}`}
+        />
+      ))}
 
       {/* Modal Examples */}
       <Modal

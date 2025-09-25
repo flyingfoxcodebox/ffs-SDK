@@ -12,3 +12,6 @@ export type { SpinnerProps, TSpinnerProps } from "./Spinner";
 
 export { default as FormGroup } from "./FormGroup";
 export type { FormGroupProps, TFormGroupProps } from "./FormGroup";
+
+export { default as Toast } from "./Toast";
+export type { ToastProps, TToastProps } from "./Toast";
