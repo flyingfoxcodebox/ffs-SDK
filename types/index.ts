@@ -100,3 +100,28 @@ export type { AuthPanelProps } from "../components/blueprints/auth/AuthPanel";
 
 // Billing Blueprint Types
 export type { CheckoutPanelProps } from "../components/blueprints/billing/CheckoutPanel";
+
+// Consulting Site Types
+export type {
+  NavigationItem,
+  NavigationConfig,
+  User,
+  UserPreferences,
+  DashboardStats,
+  ActivityItem,
+  LayoutProps,
+  SidebarProps,
+  HeaderProps,
+  PageProps,
+  HomePageProps,
+  AboutPageProps,
+  ContactPageProps,
+  ContactFormData,
+  SettingsFormData,
+  ConsultingSiteConfig,
+  ConsultingSiteProps,
+  ProtectedRouteProps,
+  SubscriptionPlan,
+  ApiResponse,
+  PaginatedResponse,
+} from "../components/blueprints/consulting-site/types";

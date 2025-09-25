@@ -20,7 +20,7 @@ export {
 // ============================================================================
 
 export { default as HubSpotService } from "../integrations/hubspot";
-export { default as QuickBooksService } from "../integrations/qiuickbooks";
+export { default as QuickBooksService } from "../integrations/quickbooks";
 export { default as SlickTextIntegration } from "../integrations/slicktext";
 export { default as SquareService } from "../integrations/square";
 export { default as StripeService } from "../integrations/stripe";
@@ -35,5 +35,5 @@ export type {
   SlickTextConfig,
   SlickTextResponse,
   SendMessageRequest,
-  SubscribeContactRequest,
+  // SubscribeContactRequest, // Temporarily commented out due to import issue
 } from "../components/blueprints/messaging/types";

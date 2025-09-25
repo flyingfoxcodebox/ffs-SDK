@@ -103,6 +103,22 @@ export interface SendMessageResponse {
   scheduledAt?: string;
 }
 
+export interface SubscribeContactRequest {
+  listId: string;
+  phoneNumber: string;
+  customFields?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  };
+}
+
+export interface SubscribeContactResponse {
+  subscriber_id: string;
+  status: "subscribed" | "failed";
+  message?: string;
+}
+
 // ✅ Upload Types
 export interface ContactUploadResult {
   success: boolean;

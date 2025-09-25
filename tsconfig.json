@@ -29,7 +29,10 @@
     "layouts",
     "starters",
     "archetypes",
-    "docs"
+    "docs",
+    "types",
+    "hooks",
+    "services"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
