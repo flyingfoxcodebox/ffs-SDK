@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { LoginForm, type HandleLogin } from "../components/auth";
+import InputField from "@ffx/components/ui/InputField";
 
-function App() {
-  const [count, setCount] = useState(0)
+const handleLogin: HandleLogin = async (email, password) => {
+  await new Promise((r) => setTimeout(r, 700));
+  console.log("Login attempted with:", email, password);
+};
+
+export default function App() {
+  const [view] = useState<"login" | "signup" | "reset">("login");
+  const [testEmail, setTestEmail] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+    <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
+      {view === "login" && (
+        <LoginForm
+          handleLogin={handleLogin}
+          forgotPasswordHref="#"
+          title="Welcome back"
+          subtitle="Sign in to your account"
+        />
+      )}
+
+      {/* 🧪 Test InputField here */}
+      <div className="mt-8 w-full max-w-md">
+        <InputField
+          type="email"
+          label="Test Email"
+          value={testEmail}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setTestEmail(e.target.value)
+          }
+          placeholder="you@example.com"
+          required
+        />
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          Current state value: {testEmail}
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </main>
+  );
 }
-
-export default App

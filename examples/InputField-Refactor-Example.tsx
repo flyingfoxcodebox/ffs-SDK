@@ -1,64 +1,21 @@
-import React, { useId, useState } from "react";
-
 /**
- * LoginForm (Reusable Template Component)
- * --------------------------------------
- * A clean, accessible login form with client-side validation.
- * It accepts a `handleLogin(email, password)` function via props so you can
- * wire it up to Supabase (or any auth service) outside the component.
+ * InputField Refactor Example
+ * ---------------------------
+ * This example shows how to replace the existing Input subcomponent
+ * in LoginForm with the new reusable InputField component.
  *
- * How to reuse:
- * 1) Import it: `import LoginForm, { type HandleLogin, type LoginFormProps } from "@/components/auth/LoginForm";`
- * 2) Provide `handleLogin` (async or sync):
- *    const handleLogin: HandleLogin = async (email, password) => {
- *      // call your auth provider (e.g., Supabase)
- *      // await supabase.auth.signInWithPassword({ email, password })
- *    };
- * 3) Render it:
- *    <LoginForm handleLogin={handleLogin} forgotPasswordHref="/forgot" />
- *
- * Notes:
- * - No external form libs; validation is simple and built-in.
- * - Fully typed with TypeScript and easy to read.
- * - Tailwind-only styling for portability.
+ * This demonstrates the migration path from form-specific inputs
+ * to the atomic InputField component.
  */
 
-export type HandleLogin = (
-  email: string,
-  password: string
-) => Promise<void> | void;
+import React, { useState } from "react";
+import InputField from "@/components/ui/InputField";
 
-export interface LoginFormProps {
-  /** Function to be called on submit with (email, password) */
-  handleLogin: HandleLogin;
-  /** Optional: URL for "Forgot password?" link (if omitted, link is hidden) */
-  forgotPasswordHref?: string;
-  /** Optional: Title above the form */
-  title?: string;
-  /** Optional: Subtext beneath title */
-  subtitle?: string;
-  /** Optional: Custom label for the submit button */
-  submitLabel?: string;
-  /** Optional: Controlled initial email value */
-  initialEmail?: string;
-  /** Optional: Pass extra classes for outer wrapper */
-  className?: string;
-}
+// ✅ BEFORE: LoginForm with internal Input component
+// (This is what currently exists in LoginForm.tsx)
 
-// ✅ Basic, readable email regex for quick client-side validation
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-type FieldErrors = {
-  email?: string;
-  password?: string;
-  form?: string; // non-field error shown at top
-};
-
-// ✅ Utility for merging Tailwind classes
-const cx = (...classes: Array<string | false | null | undefined>) =>
-  classes.filter(Boolean).join(" ");
-
-// ✅ Input subcomponent (reusable)
+// ❌ OLD WAY - Internal Input component (lines 62-105 in LoginForm.tsx):
+/*
 const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -66,7 +23,7 @@ const Input = React.forwardRef<
     error?: string;
   }
 >(function Input({ label, id, error, className, ...rest }, ref) {
-  const generatedId = useId(); // ✅ always called
+  const generatedId = useId();
   const inputId = id ?? generatedId;
   const describedBy = error ? `${inputId}-error` : undefined;
 
@@ -103,9 +60,12 @@ const Input = React.forwardRef<
     </div>
   );
 });
+*/
 
-// ✅ Main LoginForm component
-function LoginForm({
+// ✅ AFTER: LoginForm using InputField component
+// (This is how LoginForm could be refactored)
+
+function LoginFormRefactored({
   handleLogin,
   forgotPasswordHref,
   title = "Welcome back",
@@ -113,16 +73,30 @@ function LoginForm({
   submitLabel = "Sign in",
   initialEmail = "",
   className,
-}: LoginFormProps) {
+}: {
+  handleLogin: (email: string, password: string) => Promise<void> | void;
+  forgotPasswordHref?: string;
+  title?: string;
+  subtitle?: string;
+  submitLabel?: string;
+  initialEmail?: string;
+  className?: string;
+}) {
   // Local state
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<FieldErrors>({});
+  const [errors, setErrors] = useState<{
+    email?: string;
+    password?: string;
+    form?: string;
+  }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Client-side validation
+  // Validation and submit logic (same as original)
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   function validate(): boolean {
-    const next: FieldErrors = {};
+    const next: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
       next.email = "Email is required";
@@ -140,7 +114,6 @@ function LoginForm({
     return Object.keys(next).length === 0;
   }
 
-  // ✅ Handle form submit
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors({});
@@ -161,16 +134,13 @@ function LoginForm({
     }
   }
 
-  // ✅ Component UI
   return (
     <div
-      className={cx(
-        "mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 shadow-sm",
-        "dark:border-gray-800 dark:bg-gray-950",
-        className
-      )}
+      className={`mx-auto w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950 ${
+        className || ""
+      }`}
     >
-      {/* Title + Subtitle */}
+      {/* Header */}
       <div className="mb-6 text-center">
         <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
           {title}
@@ -192,31 +162,33 @@ function LoginForm({
         </div>
       )}
 
-      {/* Form */}
+      {/* Form with InputField components */}
       <form noValidate onSubmit={onSubmit} className="space-y-4">
-        <Input
+        {/* ✅ REFACTORED: Using InputField instead of internal Input */}
+        <InputField
           type="email"
           label="Email"
           placeholder="you@example.com"
           autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
+          onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
           inputMode="email"
           required
         />
 
-        <Input
+        <InputField
           type="password"
           label="Password"
           placeholder="••••••••"
           autoComplete="current-password"
           value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
+          onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
           required
         />
 
+        {/* Rest of the form remains the same */}
         <div className="flex items-center justify-between">
           <div />
           {forgotPasswordHref && (
@@ -232,12 +204,7 @@ function LoginForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className={cx(
-            "inline-flex w-full items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold",
-            "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
-            "disabled:opacity-60"
-          )}
+          className={`inline-flex w-full items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold bg-indigo-600 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:opacity-60`}
         >
           {isSubmitting ? (
             <span className="inline-flex items-center gap-2">
@@ -278,6 +245,23 @@ function LoginForm({
   );
 }
 
-// ✅ Export types + component
-export type { LoginFormProps as TLoginFormProps };
-export default LoginForm;
+// ✅ COMPARISON: Before vs After
+
+/*
+BEFORE (Internal Input component):
+- 44 lines of Input component code
+- Duplicated across LoginForm, SignUpForm, PasswordResetForm
+- Hard to maintain and update
+- Inconsistent styling across forms
+
+AFTER (InputField component):
+- 2 lines to import InputField
+- 8 lines per input field (vs 44 lines for component definition)
+- Consistent styling across all forms
+- Easy to maintain and update
+- Additional features (helperText, success states, etc.)
+- Better accessibility out of the box
+*/
+
+export default LoginFormRefactored;
+

@@ -1,38 +1,39 @@
 import React, { useId, useState } from "react";
 
 /**
- * LoginForm (Reusable Template Component)
- * --------------------------------------
- * A clean, accessible login form with client-side validation.
- * It accepts a `handleLogin(email, password)` function via props so you can
+ * SignUpForm (Reusable Template Component)
+ * ----------------------------------------
+ * A clean, accessible signup form with client-side validation.
+ * It accepts a `handleSignUp(email, password)` function via props so you can
  * wire it up to Supabase (or any auth service) outside the component.
  *
  * How to reuse:
- * 1) Import it: `import LoginForm, { type HandleLogin, type LoginFormProps } from "@/components/auth/LoginForm";`
- * 2) Provide `handleLogin` (async or sync):
- *    const handleLogin: HandleLogin = async (email, password) => {
+ * 1) Import it: `import SignUpForm, { type HandleSignUp, type SignUpFormProps } from "@/components/auth/SignUpForm";`
+ * 2) Provide `handleSignUp` (async or sync):
+ *    const handleSignUp: HandleSignUp = async (email, password) => {
  *      // call your auth provider (e.g., Supabase)
- *      // await supabase.auth.signInWithPassword({ email, password })
+ *      // await supabase.auth.signUp({ email, password })
  *    };
  * 3) Render it:
- *    <LoginForm handleLogin={handleLogin} forgotPasswordHref="/forgot" />
+ *    <SignUpForm handleSignUp={handleSignUp} loginHref="/login" />
  *
  * Notes:
  * - No external form libs; validation is simple and built-in.
  * - Fully typed with TypeScript and easy to read.
  * - Tailwind-only styling for portability.
+ * - Includes password confirmation validation.
  */
 
-export type HandleLogin = (
+export type HandleSignUp = (
   email: string,
   password: string
 ) => Promise<void> | void;
 
-export interface LoginFormProps {
+export interface SignUpFormProps {
   /** Function to be called on submit with (email, password) */
-  handleLogin: HandleLogin;
-  /** Optional: URL for "Forgot password?" link (if omitted, link is hidden) */
-  forgotPasswordHref?: string;
+  handleSignUp: HandleSignUp;
+  /** Optional: URL for "Already have an account? Log in" link (if omitted, link is hidden) */
+  loginHref?: string;
   /** Optional: Title above the form */
   title?: string;
   /** Optional: Subtext beneath title */
@@ -48,17 +49,19 @@ export interface LoginFormProps {
 // ✅ Basic, readable email regex for quick client-side validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// ✅ Type for tracking validation errors across all form fields
 type FieldErrors = {
   email?: string;
   password?: string;
+  confirmPassword?: string;
   form?: string; // non-field error shown at top
 };
 
-// ✅ Utility for merging Tailwind classes
+// ✅ Utility for merging Tailwind classes (handles conditional styling)
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
 
-// ✅ Input subcomponent (reusable)
+// ✅ Reusable Input subcomponent with built-in accessibility features
 const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -66,12 +69,14 @@ const Input = React.forwardRef<
     error?: string;
   }
 >(function Input({ label, id, error, className, ...rest }, ref) {
-  const generatedId = useId(); // ✅ always called
+  // ✅ Generate unique IDs for accessibility (aria-describedby)
+  const generatedId = useId(); // always called
   const inputId = id ?? generatedId;
   const describedBy = error ? `${inputId}-error` : undefined;
 
   return (
     <div>
+      {/* ✅ Properly labeled form field */}
       <label
         htmlFor={inputId}
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
@@ -81,17 +86,20 @@ const Input = React.forwardRef<
       <input
         ref={ref}
         id={inputId}
-        aria-invalid={!!error}
-        aria-describedby={describedBy}
+        aria-invalid={!!error} // ✅ Screen reader announces validation errors
+        aria-describedby={describedBy} // ✅ Links to error message
         className={cx(
+          // ✅ Base input styling with focus states
           "mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400",
           "shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1",
           "disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100",
+          // ✅ Error state styling
           error && "border-red-400 ring-1 ring-red-400",
           className
         )}
         {...rest}
       />
+      {/* ✅ Accessible error message with proper ARIA relationship */}
       {error && (
         <p
           id={`${inputId}-error`}
@@ -104,43 +112,53 @@ const Input = React.forwardRef<
   );
 });
 
-// ✅ Main LoginForm component
-function LoginForm({
-  handleLogin,
-  forgotPasswordHref,
-  title = "Welcome back",
-  subtitle = "Please sign in to your account",
-  submitLabel = "Sign in",
+// ✅ Main SignUpForm component
+function SignUpForm({
+  handleSignUp,
+  loginHref,
+  title = "Create your account",
+  subtitle = "Please fill in the details below",
+  submitLabel = "Sign up",
   initialEmail = "",
   className,
-}: LoginFormProps) {
-  // Local state
+}: SignUpFormProps) {
+  // ✅ Local state for form data and validation
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Client-side validation
+  // ✅ Client-side validation function
   function validate(): boolean {
     const next: FieldErrors = {};
 
+    // ✅ Email validation
     if (!email.trim()) {
       next.email = "Email is required";
     } else if (!EMAIL_REGEX.test(email)) {
       next.email = "Enter a valid email address";
     }
 
+    // ✅ Password validation (minimum 8 characters)
     if (!password) {
       next.password = "Password is required";
     } else if (password.length < 8) {
       next.password = "Use at least 8 characters";
     }
 
+    // ✅ Password confirmation validation
+    if (!confirmPassword) {
+      next.confirmPassword = "Please confirm your password";
+    } else if (password !== confirmPassword) {
+      next.confirmPassword = "Passwords do not match";
+    }
+
     setErrors(next);
     return Object.keys(next).length === 0;
   }
 
-  // ✅ Handle form submit
+  // ✅ Handle form submission
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors({});
@@ -149,12 +167,13 @@ function LoginForm({
 
     try {
       setIsSubmitting(true);
-      await Promise.resolve(handleLogin(email, password));
+      await Promise.resolve(handleSignUp(email, password));
     } catch (err: unknown) {
+      // ✅ Handle any errors from the auth provider
       const message =
         err instanceof Error
           ? err.message
-          : "Unable to sign in. Please try again.";
+          : "Unable to create account. Please try again.";
       setErrors({ form: message });
     } finally {
       setIsSubmitting(false);
@@ -170,7 +189,7 @@ function LoginForm({
         className
       )}
     >
-      {/* Title + Subtitle */}
+      {/* ✅ Header section with title and subtitle */}
       <div className="mb-6 text-center">
         <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
           {title}
@@ -182,18 +201,19 @@ function LoginForm({
         )}
       </div>
 
-      {/* Form-level error */}
+      {/* ✅ Form-level error message (for server/auth errors) */}
       {errors.form && (
         <div
-          role="alert"
+          role="alert" // ✅ Screen reader announces this as an alert
           className="mb-4 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300"
         >
           {errors.form}
         </div>
       )}
 
-      {/* Form */}
+      {/* ✅ Main form with all input fields */}
       <form noValidate onSubmit={onSubmit} className="space-y-4">
+        {/* ✅ Email input field */}
         <Input
           type="email"
           label="Email"
@@ -206,29 +226,31 @@ function LoginForm({
           required
         />
 
+        {/* ✅ Password input field */}
         <Input
           type="password"
           label="Password"
           placeholder="••••••••"
-          autoComplete="current-password"
+          autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
           error={errors.password}
           required
         />
 
-        <div className="flex items-center justify-between">
-          <div />
-          {forgotPasswordHref && (
-            <a
-              href={forgotPasswordHref}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:text-indigo-400 dark:hover:text-indigo-300"
-            >
-              Forgot password?
-            </a>
-          )}
-        </div>
+        {/* ✅ Password confirmation input field */}
+        <Input
+          type="password"
+          label="Confirm Password"
+          placeholder="••••••••"
+          autoComplete="new-password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+          error={errors.confirmPassword}
+          required
+        />
 
+        {/* ✅ Submit button with loading state */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -240,6 +262,7 @@ function LoginForm({
           )}
         >
           {isSubmitting ? (
+            // ✅ Loading state with spinner animation
             <span className="inline-flex items-center gap-2">
               <svg
                 className="h-4 w-4 animate-spin"
@@ -262,7 +285,7 @@ function LoginForm({
                   d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                 />
               </svg>
-              Signing in…
+              Creating account…
             </span>
           ) : (
             submitLabel
@@ -270,14 +293,28 @@ function LoginForm({
         </button>
       </form>
 
-      {/* Footer */}
-      <div className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-        By signing in you agree to our Terms and Privacy Policy.
+      {/* ✅ Footer section with login link */}
+      <div className="mt-4 text-center">
+        {loginHref && (
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?{" "}
+            <a
+              href={loginHref}
+              className="font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:text-indigo-400 dark:hover:text-indigo-300"
+            >
+              Log in
+            </a>
+          </p>
+        )}
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          By signing up you agree to our Terms and Privacy Policy.
+        </p>
       </div>
     </div>
   );
 }
 
-// ✅ Export types + component
-export type { LoginFormProps as TLoginFormProps };
-export default LoginForm;
+// ✅ Export types + component for easy importing
+export type { SignUpFormProps as TSignUpFormProps };
+export default SignUpForm;
+

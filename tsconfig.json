@@ -1,7 +1,35 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "types": ["node"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ffx/*": ["./*"] // 👈 this line is the magic: lets TS resolve from repo root
+    }
+  },
+  "include": [
+    "src",
+    "components",
+    "integrations",
+    "layouts",
+    "starters",
+    "archetypes",
+    "docs"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
