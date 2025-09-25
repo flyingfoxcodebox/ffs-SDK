@@ -455,3 +455,33 @@ export function getNumberEnvVar(key: string, defaultValue?: number): number {
   }
   return num;
 }
+
+// ============================================================================
+// External API Utilities
+// ============================================================================
+
+/**
+ * Log external API calls
+ */
+export function externalApiLogger(
+  service: string,
+  method: string,
+  url: string,
+  statusCode?: number,
+  duration?: number,
+  error?: Error
+): void {
+  const metadata = {
+    service,
+    method,
+    url,
+    statusCode,
+    duration: duration ? `${duration}ms` : undefined,
+  };
+
+  if (error) {
+    console.error(`External API error (${service})`, error, metadata);
+  } else {
+    console.info(`External API call (${service})`, metadata);
+  }
+}
