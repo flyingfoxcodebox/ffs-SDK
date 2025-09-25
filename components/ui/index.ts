@@ -9,3 +9,6 @@ export type { ModalProps, TModalProps } from "./Modal";
 
 export { default as Spinner } from "./Spinner";
 export type { SpinnerProps, TSpinnerProps } from "./Spinner";
+
+export { default as FormGroup } from "./FormGroup";
+export type { FormGroupProps, TFormGroupProps } from "./FormGroup";

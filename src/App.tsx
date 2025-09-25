@@ -4,6 +4,7 @@ import InputField from "@ffx/components/ui/InputField";
 import Button from "@ffx/components/ui/Button";
 import Modal from "@ffx/components/ui/Modal";
 import Spinner from "@ffx/components/ui/Spinner";
+import FormGroup from "@ffx/components/ui/FormGroup";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -16,6 +17,12 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   return (
     <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
@@ -199,6 +206,105 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* FormGroup Demo */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            FormGroup Examples
+          </h3>
+
+          <div className="space-y-4">
+            {/* Basic FormGroup */}
+            <FormGroup label="Basic Input">
+              <InputField
+                type="text"
+                label=""
+                value={formData.name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter your name"
+              />
+            </FormGroup>
+
+            {/* FormGroup with Description */}
+            <FormGroup
+              label="Email Address"
+              description="We'll never share your email with anyone"
+              required
+            >
+              <InputField
+                type="email"
+                label=""
+                value={formData.email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
+                placeholder="you@example.com"
+              />
+            </FormGroup>
+
+            {/* FormGroup with Error */}
+            <FormGroup
+              label="Message"
+              description="Tell us how we can help you"
+              error={formErrors.message}
+              required
+            >
+              <InputField
+                type="text"
+                label=""
+                value={formData.message}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFormData((prev) => ({ ...prev, message: e.target.value }))
+                }
+                placeholder="Enter your message"
+              />
+            </FormGroup>
+
+            {/* FormGroup with Select */}
+            <FormGroup
+              label="Country"
+              description="Select your country of residence"
+            >
+              <select className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">Choose a country</option>
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+                <option value="au">Australia</option>
+              </select>
+            </FormGroup>
+
+            {/* FormGroup with Textarea */}
+            <FormGroup
+              label="Additional Comments"
+              description="Any additional information you'd like to share"
+            >
+              <textarea
+                rows={3}
+                placeholder="Enter additional comments..."
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+              />
+            </FormGroup>
+
+            {/* Demo Button */}
+            <Button
+              variant="primary"
+              onClick={() => {
+                // Simulate validation
+                const errors: Record<string, string> = {};
+                if (!formData.message) {
+                  errors.message = "Message is required";
+                }
+                setFormErrors(errors);
+                console.log("Form data:", formData);
+              }}
+            >
+              Test FormGroup
+            </Button>
           </div>
         </div>
       </div>
