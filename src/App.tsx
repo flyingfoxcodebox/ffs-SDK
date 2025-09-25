@@ -24,6 +24,7 @@ import CheckoutPanel, {
 //   BillingDashboard,
 // } from "@ffx/components/billing";
 import { MessagingDashboard } from "@ffx/components/blueprints/messaging";
+import { POSDashboard } from "@ffx/components/blueprints/pos";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -36,6 +37,7 @@ export default function App() {
   const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
   // const [showBillingDashboard, setShowBillingDashboard] = useState(false);
   const [showMessagingDashboard, setShowMessagingDashboard] = useState(false);
+  const [showPOSDashboard, setShowPOSDashboard] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -302,6 +304,32 @@ export default function App() {
     );
   }
 
+  if (showPOSDashboard) {
+    return (
+      <main className="min-h-screen bg-gray-100 dark:bg-gray-950">
+        <POSDashboard
+          products={[]} // Use default mock products from useProducts hook
+          onOrderComplete={(order: unknown) => {
+            console.log("POS Order completed:", order);
+          }}
+          onPaymentProcess={async (order: unknown, paymentMethod: unknown) => {
+            console.log("POS Payment processed:", { order, paymentMethod });
+            // Simulate payment processing
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }}
+        />
+        <div className="fixed bottom-4 left-4">
+          <Button
+            variant="secondary"
+            onClick={() => setShowPOSDashboard(false)}
+          >
+            Back to Component Demos
+          </Button>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
       {view === "login" && (
@@ -388,6 +416,25 @@ export default function App() {
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
           >
             Try MessagingDashboard Blueprint
+          </Button>
+        </div>
+
+        {/* POSDashboard Demo */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            🛒 POSDashboard Blueprint
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Complete Point of Sale system with product catalog, cart, and
+            checkout
+          </p>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setShowPOSDashboard(true)}
+            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+          >
+            Try POSDashboard Blueprint
           </Button>
         </div>
       </div>
