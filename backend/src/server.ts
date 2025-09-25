@@ -22,6 +22,7 @@ import {
   messagingRoutes,
   posRoutes,
 } from "./routes";
+import testRoutes from "./routes/testRoutes";
 import { logger } from "./middleware/logging";
 import { getEnvVar, getNumberEnvVar, getBooleanEnvVar } from "./utils";
 
@@ -92,6 +93,7 @@ app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/billing`, billingRoutes);
 app.use(`${API_PREFIX}/messaging`, messagingRoutes);
 app.use(`${API_PREFIX}/pos`, posRoutes);
+app.use(`${API_PREFIX}/test`, testRoutes);
 
 // ============================================================================
 // Root Route

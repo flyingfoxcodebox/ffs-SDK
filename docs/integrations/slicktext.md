@@ -355,6 +355,118 @@ const result = await slicktextService.sendMessage("list_123", "Hello!");
 
 ## Testing
 
+### Mock Testing System
+
+The SlickText integration includes a comprehensive mock testing system that allows you to test all functionality without hitting the live API.
+
+#### Environment Configuration
+
+Set the `USE_MOCKS` environment variable to enable mock mode:
+
+```bash
+# Enable mock mode for testing
+USE_MOCKS=true
+
+# Or disable for real API calls
+USE_MOCKS=false
+```
+
+#### Mock Service Features
+
+The mock service provides:
+
+- **Realistic data**: Mock responses that match real API v2 structure
+- **Error simulation**: Test error handling scenarios
+- **Performance testing**: Simulate network delays and concurrent requests
+- **Webhook testing**: Mock webhook events and processing
+
+#### Running Mock Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run only SlickText tests
+npm run test:slicktext
+
+# Run tests in watch mode
+npm run test:slicktext:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+#### Test API Endpoints
+
+The backend includes test endpoints for manual testing:
+
+```bash
+# Get service status
+GET /api/test/slicktext/status
+
+# Switch to mock mode
+POST /api/test/slicktext/mode
+{ "mode": "mock" }
+
+# Test sending a message
+POST /api/test/slicktext/send
+{
+  "listId": "list_123456789",
+  "content": "Test message"
+}
+
+# Test subscribing a contact
+POST /api/test/slicktext/subscribe
+{
+  "listId": "list_123456789",
+  "phone": "+1234567890",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+# Test complete workflow
+POST /api/test/slicktext/workflow
+```
+
+#### Mock Data Examples
+
+The mock system includes realistic test data:
+
+```typescript
+// Mock lists
+const mockLists = [
+  {
+    id: "list_123456789",
+    name: "Main Subscribers",
+    subscriber_count: 1250,
+  },
+];
+
+// Mock contacts
+const mockContacts = [
+  {
+    id: "contact_111222333",
+    phone: "+1234567890",
+    first_name: "John",
+    last_name: "Doe",
+    list_id: "list_123456789",
+  },
+];
+
+// Mock campaigns with statistics
+const mockCampaigns = [
+  {
+    id: "camp_111222333",
+    name: "Welcome Campaign",
+    sent_count: 1250,
+    delivered_count: 1198,
+    failed_count: 52,
+    opened_count: 456,
+    clicked_count: 89,
+  },
+];
+```
+
 ### Sandbox Environment
 
 Use the sandbox environment for development and testing:
