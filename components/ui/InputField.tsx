@@ -14,7 +14,7 @@ import React, { useId, forwardRef } from "react";
  * - Any form requiring user input
  *
  * How to reuse:
- * 1) Import it: `import InputField from "@/components/ui/InputField";`
+ * 1) Import it: `import InputField from "@ffx/components/ui/InputField";`
  * 2) Use it in any form:
  *    <InputField
  *      type="email"
@@ -151,4 +151,3 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 // ✅ Export types + component for easy importing
 export type { InputFieldProps as TInputFieldProps };
 export default InputField;
-

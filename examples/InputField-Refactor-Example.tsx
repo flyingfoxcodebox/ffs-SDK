@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from "react";
-import InputField from "@/components/ui/InputField";
+import InputField from "@ffx/components/ui/InputField";
 
 // ✅ BEFORE: LoginForm with internal Input component
 // (This is what currently exists in LoginForm.tsx)
@@ -264,4 +264,3 @@ AFTER (InputField component):
 */
 
 export default LoginFormRefactored;
-

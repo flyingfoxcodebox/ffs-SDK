@@ -45,7 +45,7 @@ InputField provides a consistent, accessible, and fully-featured input component
 ### Basic Text Input
 
 ```tsx
-import InputField from "@/components/ui/InputField";
+import InputField from "@ffx/components/ui/InputField";
 
 <InputField
   type="text"
@@ -200,7 +200,7 @@ const Input = React.forwardRef<HTMLInputElement, {...}>(
 **After (with InputField):**
 
 ```tsx
-import InputField from "@/components/ui/InputField";
+import InputField from "@ffx/components/ui/InputField";
 
 // In LoginForm component:
 <InputField
@@ -220,7 +220,7 @@ import InputField from "@/components/ui/InputField";
 
 ```tsx
 import { useForm } from "react-hook-form";
-import InputField from "@/components/ui/InputField";
+import InputField from "@ffx/components/ui/InputField";
 
 function MyForm() {
   const {
@@ -368,6 +368,43 @@ function ContactForm() {
 - **Tree Shaking**: Only imports what you use
 - **Memoization**: Consider wrapping in React.memo for large forms
 - **Bundle Size**: Minimal impact on bundle size
+
+## ⚙️ Configuration Requirements
+
+### TypeScript Configuration
+
+The InputField component requires proper TypeScript configuration for the `@ffx` alias to work correctly:
+
+**tsconfig.json:**
+
+```json
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ffx/*": ["./*"]
+    }
+  }
+}
+```
+
+**vite.config.ts:**
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { resolve } from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@ffx": resolve(__dirname, "."),
+    },
+  },
+});
+```
 
 ## ✅ Summary
 
