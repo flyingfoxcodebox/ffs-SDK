@@ -14,6 +14,14 @@ import AuthPanel, {
 import CheckoutPanel, {
   type SubscriptionPlan,
 } from "@ffx/components/blueprints/billing/CheckoutPanel";
+import {
+  BillingSummary,
+  PaymentMethodForm,
+  PlanSelector,
+  InvoiceList,
+  SubscriptionStatusBanner,
+  BillingDashboard,
+} from "@ffx/components/billing";
 
 const handleLogin: HandleLogin = async (email, password) => {
   await new Promise((r) => setTimeout(r, 700));
@@ -24,6 +32,7 @@ export default function App() {
   const [view] = useState<"login" | "signup" | "reset">("login");
   const [showAuthPanel, setShowAuthPanel] = useState(false);
   const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
+  const [showBillingDashboard, setShowBillingDashboard] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,6 +143,53 @@ export default function App() {
     }
   };
 
+  // ✅ Billing Dashboard handlers
+  const handleBillingSelectPlan = async (planId: string) => {
+    console.log("Billing Dashboard - Plan selected:", planId);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const handleBillingAddPaymentMethod = async (cardDetails: any) => {
+    console.log("Billing Dashboard - Adding payment method:", cardDetails);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  };
+
+  const handleBillingUpdatePaymentMethod = async (cardDetails: any) => {
+    console.log("Billing Dashboard - Updating payment method:", cardDetails);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  };
+
+  const handleBillingDownloadInvoice = (invoiceId: string) => {
+    console.log("Billing Dashboard - Downloading invoice:", invoiceId);
+    // Simulate download
+    setTimeout(() => {
+      console.log("Invoice downloaded successfully");
+    }, 500);
+  };
+
+  const handleBillingUpgrade = () => {
+    console.log("Billing Dashboard - Upgrading subscription");
+    // Simulate redirect
+  };
+
+  const handleBillingRenew = () => {
+    console.log("Billing Dashboard - Renewing subscription");
+    // Simulate API call
+  };
+
+  const handleBillingReactivate = () => {
+    console.log("Billing Dashboard - Reactivating subscription");
+    // Simulate API call
+  };
+
+  const handleBillingCancel = () => {
+    console.log("Billing Dashboard - Cancelling subscription");
+    // Simulate API call
+  };
+
   if (showAuthPanel) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-6">
@@ -180,6 +236,37 @@ export default function App() {
               Back to Component Demos
             </Button>
           </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (showBillingDashboard) {
+    return (
+      <main className="min-h-screen bg-gray-100 dark:bg-gray-950">
+        <BillingDashboard
+          plans={samplePlans}
+          onSelectPlan={handleBillingSelectPlan}
+          onAddPaymentMethod={handleBillingAddPaymentMethod}
+          onUpdatePaymentMethod={handleBillingUpdatePaymentMethod}
+          onDownloadInvoice={handleBillingDownloadInvoice}
+          onUpgrade={handleBillingUpgrade}
+          onRenew={handleBillingRenew}
+          onReactivate={handleBillingReactivate}
+          onCancelSubscription={handleBillingCancel}
+          title="Billing Dashboard"
+          subtitle="Manage your subscription, payment methods, and billing history"
+          showPlanSelector={true}
+          showPaymentMethod={true}
+          showInvoiceHistory={true}
+        />
+        <div className="fixed bottom-4 left-4">
+          <Button
+            variant="secondary"
+            onClick={() => setShowBillingDashboard(false)}
+          >
+            Back to Component Demos
+          </Button>
         </div>
       </main>
     );
@@ -235,6 +322,24 @@ export default function App() {
             className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
           >
             Try CheckoutPanel Blueprint
+          </Button>
+        </div>
+
+        {/* BillingDashboard Demo */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            💼 BillingDashboard Blueprint
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Complete billing management dashboard with all components
+          </p>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setShowBillingDashboard(true)}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+          >
+            Try BillingDashboard Blueprint
           </Button>
         </div>
       </div>
