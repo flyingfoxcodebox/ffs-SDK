@@ -40,7 +40,7 @@ export default function CheckoutSummary({
       },
     }
   );
-  const [requireCustomerInfo, setRequireCustomerInfo] = useState(false);
+  const [requireCustomerInfo] = useState(false);
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
 
@@ -57,7 +57,7 @@ export default function CheckoutSummary({
   };
 
   const handleAddressChange = (
-    field: keyof CustomerInfo["address"],
+    field: keyof NonNullable<CustomerInfo["address"]>,
     value: string
   ) => {
     const updatedInfo = {

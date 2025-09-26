@@ -4,8 +4,8 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { ApiError, ErrorCode } from "../types";
-import { formatErrorResponse, createApiError } from "../utils";
+import { ApiError } from "../types";
+import { formatErrorResponse } from "../utils";
 
 // ============================================================================
 // Error Handler Middleware
@@ -153,7 +153,9 @@ export function errorHandler(
  * Wrapper for async route handlers to catch errors
  * Usage: wrapAsync(async (req, res, next) => { ... })
  */
-export function wrapAsync<T extends any[]>(fn: (...args: T) => Promise<any>) {
+export function wrapAsync(
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
+) {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

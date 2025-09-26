@@ -10,7 +10,14 @@ export interface Message {
   content: string;
   segments: MessageSegment[];
   recipientCount: number;
-  status: "draft" | "scheduled" | "sending" | "sent" | "failed";
+  status:
+    | "draft"
+    | "scheduled"
+    | "sending"
+    | "sent"
+    | "failed"
+    | "queued"
+    | "delivered";
   createdAt: string;
   scheduledAt?: string;
   sentAt?: string;
@@ -54,7 +61,14 @@ export interface Campaign {
   name: string;
   message: Message;
   recipients: Contact[];
-  status: "draft" | "scheduled" | "sending" | "sent" | "paused" | "cancelled";
+  status:
+    | "draft"
+    | "scheduled"
+    | "sending"
+    | "sent"
+    | "paused"
+    | "cancelled"
+    | "failed";
   scheduledAt?: string;
   sentAt?: string;
   deliveryStats: DeliveryStats;
@@ -81,7 +95,7 @@ export interface SlickTextConfig {
 }
 
 // ✅ API Response Types
-export interface SlickTextResponse<T = any> {
+export interface SlickTextResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -98,7 +112,10 @@ export interface SendMessageRequest {
 export interface SendMessageResponse {
   campaignId: string;
   messageId: string;
+  message_id: string; // For API compatibility
   recipientCount: number;
+  recipients: string[];
+  status: "queued" | "sent" | "delivered" | "failed";
   estimatedCost: number;
   scheduledAt?: string;
 }
@@ -240,4 +257,83 @@ export interface MessagingDashboardProps {
   slickTextConfig?: SlickTextConfig;
   onConfigUpdate?: (config: SlickTextConfig) => void;
   className?: string;
+}
+
+// ✅ Additional Types for Better Type Safety
+export type CampaignStatus =
+  | "draft"
+  | "scheduled"
+  | "sending"
+  | "sent"
+  | "paused"
+  | "cancelled"
+  | "failed";
+export type MessageStatus =
+  | "draft"
+  | "scheduled"
+  | "sending"
+  | "sent"
+  | "failed";
+export type OptInStatus = "opted_in" | "opted_out" | "pending";
+
+export interface MessagePayload {
+  content: string;
+  recipients: string[];
+  scheduledAt?: string;
+  campaignName?: string;
+}
+
+export interface MessageResult {
+  success: boolean;
+  messageId?: string;
+  campaignId?: string;
+  error?: string;
+  cost?: number;
+}
+
+export interface ContactUploadResult {
+  success: boolean;
+  totalRows: number;
+  validContacts: Contact[];
+  errors: ContactUploadError[];
+  duplicates: Contact[];
+  successCount: number;
+  errorCount: number;
+}
+
+// ✅ API Response Interfaces for Type Safety
+export interface SlickTextContactResponse {
+  id: string;
+  phone_number: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  is_opted_in: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SlickTextMessageResponse {
+  id: string;
+  content: string;
+  contact_count: number;
+  scheduled_at?: string;
+}
+
+export interface SlickTextCampaignResponse {
+  id: string;
+  name: string;
+  message: string;
+  contact_count: number;
+  scheduled_at?: string;
+  sent_at?: string;
+}
+
+export interface SlickTextListResponse {
+  id: string;
+  name: string;
+  subscriber_count: number;
+  contact_count: number;
+  created_at: string;
+  updated_at: string;
 }

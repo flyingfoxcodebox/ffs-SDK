@@ -114,16 +114,26 @@ export class BillingController {
       const { planId, email, paymentMethod, customerInfo } =
         req.body as CheckoutRequest;
 
-      // Validate plan exists
-      const plansResponse = await BillingController.getPlans(
-        req,
-        res,
-        () => {}
-      );
-      const plans = (plansResponse as any).data;
-      const selectedPlan = plans.find(
-        (plan: SubscriptionPlan) => plan.id === planId
-      );
+      // Validate plan exists - get available plans
+      const availablePlans = [
+        {
+          id: "basic",
+          name: "Basic Plan",
+          price: 29.99,
+          currency: "USD",
+          interval: "monthly" as const,
+          features: ["Basic features"],
+        },
+        {
+          id: "pro",
+          name: "Pro Plan",
+          price: 59.99,
+          currency: "USD",
+          interval: "monthly" as const,
+          features: ["Pro features"],
+        },
+      ];
+      const selectedPlan = availablePlans.find((plan) => plan.id === planId);
 
       if (!selectedPlan) {
         throw createNotFoundError("Subscription plan");
@@ -246,15 +256,25 @@ export class BillingController {
       }
 
       // Validate new plan exists
-      const plansResponse = await BillingController.getPlans(
-        req,
-        res,
-        () => {}
-      );
-      const plans = (plansResponse as any).data;
-      const selectedPlan = plans.find(
-        (plan: SubscriptionPlan) => plan.id === planId
-      );
+      const availablePlans = [
+        {
+          id: "basic",
+          name: "Basic Plan",
+          price: 29.99,
+          currency: "USD",
+          interval: "monthly" as const,
+          features: ["Basic features"],
+        },
+        {
+          id: "pro",
+          name: "Pro Plan",
+          price: 59.99,
+          currency: "USD",
+          interval: "monthly" as const,
+          features: ["Pro features"],
+        },
+      ];
+      const selectedPlan = availablePlans.find((plan) => plan.id === planId);
 
       if (!selectedPlan) {
         throw createNotFoundError("Subscription plan");

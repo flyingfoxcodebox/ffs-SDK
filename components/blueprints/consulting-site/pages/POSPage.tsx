@@ -43,7 +43,7 @@ export const POSPage: React.FC<PageProps> = ({
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
-  const handleCheckout = (orderData: any) => {
+  const handleCheckout = (orderData: Record<string, unknown>) => {
     console.log("Order processed:", orderData);
     addToast("Order processed successfully!", "success");
   };

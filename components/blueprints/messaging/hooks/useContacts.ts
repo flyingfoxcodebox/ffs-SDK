@@ -99,6 +99,8 @@ export const useContacts = () => {
         validContacts,
         errors,
         duplicates,
+        successCount: validContacts.length,
+        errorCount: errors.length,
       };
     },
     [validatePhoneNumber, validateEmail]

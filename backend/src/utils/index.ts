@@ -485,3 +485,54 @@ export function externalApiLogger(
     console.info(`External API call (${service})`, metadata);
   }
 }
+
+// ============================================================================
+// Business & Security Event Logging
+// ============================================================================
+
+/**
+ * Log business events
+ */
+export function businessEventLogger(
+  event: string,
+  userId?: string,
+  metadata?: Record<string, any>
+): void {
+  console.info("Business event", {
+    event,
+    userId,
+    ...metadata,
+  });
+}
+
+/**
+ * Log security events
+ */
+export function securityEventLogger(
+  event: string,
+  severity: "low" | "medium" | "high" | "critical",
+  userId?: string,
+  ip?: string,
+  metadata?: Record<string, any>
+): void {
+  const logLevel =
+    severity === "critical" || severity === "high" ? "error" : "warn";
+
+  if (logLevel === "error") {
+    console.error("Security event", {
+      event,
+      severity,
+      userId,
+      ip,
+      ...metadata,
+    });
+  } else {
+    console.warn("Security event", {
+      event,
+      severity,
+      userId,
+      ip,
+      ...metadata,
+    });
+  }
+}

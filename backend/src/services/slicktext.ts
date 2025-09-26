@@ -290,6 +290,29 @@ export class SlickTextService {
   }
 
   /**
+   * Get campaigns
+   */
+  async getCampaigns(): Promise<SlickTextResponse<SlickTextCampaign[]>> {
+    try {
+      const response = await this.makeApiCall("/campaigns", "GET");
+
+      return {
+        success: true,
+        data: response.data as SlickTextCampaign[],
+      };
+    } catch (error) {
+      logger.error(
+        "SlickText getCampaigns error:",
+        error instanceof Error ? error : new Error(String(error))
+      );
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+
+  /**
    * Get campaign statistics
    */
   async getCampaignStats(
@@ -427,7 +450,7 @@ export class SlickTextService {
   /**
    * Verify webhook signature
    */
-  async verifyWebhook(): Promise<boolean> {
+  async verifyWebhook(payload: string, signature: string): Promise<boolean> {
     // TODO: Implement webhook signature verification for API v2
     // This would typically involve HMAC-SHA256 verification
     logger.info("Webhook verification not implemented for API v2");

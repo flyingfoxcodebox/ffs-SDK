@@ -1,0 +1,141 @@
+backend/src/services/slicktext.ts(6,24): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/middleware/logging.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+backend/src/services/stripe.ts(14,8): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/types/index.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via "../types" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/stripe.ts'
+    Imported via "../types" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/utils/index.ts'
+    Imported via "../types" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/square.ts'
+    Imported via "../types" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/supabase.ts'
+backend/src/services/stripe.ts(15,59): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/utils/index.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via "../utils" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/stripe.ts'
+    Imported via "../utils" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/square.ts'
+    Imported via "../utils" from file 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/supabase.ts'
+backend/src/services/supabase.ts(63,9): error TS2322: Type '"user" | UserRole' is not assignable to type 'UserRole'.
+  Type '"user"' is not assignable to type 'UserRole'.
+backend/src/services/supabase.ts(104,9): error TS2322: Type '"user"' is not assignable to type 'UserRole'.
+backend/src/services/supabase.ts(145,9): error TS2322: Type '"user"' is not assignable to type 'UserRole'.
+backend/src/services/supabase.ts(189,9): error TS2322: Type '"user" | UserRole' is not assignable to type 'UserRole'.
+  Type '"user"' is not assignable to type 'UserRole'.
+backend/src/services/supabase.ts(271,9): error TS2322: Type '"pending" | OrderStatus' is not assignable to type 'OrderStatus'.
+  Type '"pending"' is not assignable to type 'OrderStatus'.
+backend/src/services/supabase.ts(312,9): error TS2322: Type '"pending"' is not assignable to type 'OrderStatus'.
+backend/src/services/supabase.ts(362,11): error TS2322: Type '"pending"' is not assignable to type 'OrderStatus'.
+backend/src/services/supabase.ts(558,9): error TS2322: Type '"user"' is not assignable to type 'UserRole'.
+backend/src/types/index.ts(225,18): error TS2430: Interface 'AuthenticatedRequest' incorrectly extends interface 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+  Property 'body' is optional in type 'AuthenticatedRequest' but required in type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+components/billing/BillingDashboard.tsx(263,17): error TS2322: Type 'import("C:/Users/arvid/Documents/cursor-sprint-templates/components/blueprints/billing/CheckoutPanel").SubscriptionPlan[]' is not assignable to type 'import("C:/Users/arvid/Documents/cursor-sprint-templates/components/billing/PlanSelector").SubscriptionPlan[]'.
+  Property 'currency' is missing in type 'import("C:/Users/arvid/Documents/cursor-sprint-templates/components/blueprints/billing/CheckoutPanel").SubscriptionPlan' but required in type 'import("C:/Users/arvid/Documents/cursor-sprint-templates/components/billing/PlanSelector").SubscriptionPlan'.
+components/billing/BillingDashboard.tsx(282,17): error TS2322: Type '{ onAddPaymentMethod: (cardDetails: any) => Promise<void>; onUpdatePaymentMethod: (cardDetails: any) => Promise<void>; currentPaymentMethod: { id: string; type: "card" | ... 1 more ... | "bank"; ... 4 more ...; isDefault: boolean; } | null | undefined; }' is not assignable to type 'IntrinsicAttributes & PaymentMethodFormProps & RefAttributes<HTMLDivElement>'.
+  Property 'onAddPaymentMethod' does not exist on type 'IntrinsicAttributes & PaymentMethodFormProps & RefAttributes<HTMLDivElement>'.
+components/billing/BillingDashboard.tsx(300,28): error TS2322: Type '{ onDownloadInvoice: (invoiceId: string) => void; }' is not assignable to type 'IntrinsicAttributes & InvoiceListProps'.
+  Property 'onDownloadInvoice' does not exist on type 'IntrinsicAttributes & InvoiceListProps'.
+components/billing/index.ts(5,3): error TS2724: '"./BillingSummary"' has no exported member named 'TBillingSummaryProps'. Did you mean 'BillingSummaryProps'?
+components/billing/index.ts(11,3): error TS2724: '"./PaymentMethodForm"' has no exported member named 'TPaymentMethodFormProps'. Did you mean 'PaymentMethodFormProps'?
+components/billing/index.ts(15,34): error TS2724: '"./PlanSelector"' has no exported member named 'TPlanSelectorProps'. Did you mean 'PlanSelectorProps'?
+components/billing/index.ts(18,33): error TS2724: '"./InvoiceList"' has no exported member named 'TInvoiceListProps'. Did you mean 'InvoiceListProps'?
+components/blueprints/consulting-site/ConsultingSite.tsx(183,17): error TS2741: Property 'children' is missing in type '{ stats: DashboardStats; recentActivity: ActivityItem[]; }' but required in type 'HomePageProps'.
+components/blueprints/consulting-site/ConsultingSite.tsx(185,17): error TS2741: Property 'children' is missing in type '{}' but required in type 'PageProps'.
+components/blueprints/consulting-site/ConsultingSite.tsx(187,17): error TS2741: Property 'children' is missing in type '{}' but required in type 'PageProps'.
+components/blueprints/consulting-site/ConsultingSite.tsx(189,17): error TS2741: Property 'children' is missing in type '{}' but required in type 'PageProps'.
+components/blueprints/consulting-site/ConsultingSite.tsx(191,17): error TS2741: Property 'children' is missing in type '{}' but required in type 'PageProps'.
+components/blueprints/consulting-site/ConsultingSite.tsx(193,17): error TS2741: Property 'children' is missing in type '{ stats: DashboardStats; recentActivity: ActivityItem[]; }' but required in type 'HomePageProps'.
+components/blueprints/consulting-site/layout/Header.tsx(133,51): error TS2322: Type '{ children: string; variant: "ghost"; size: "sm"; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/layout/Header.tsx(136,53): error TS2322: Type '{ children: string; variant: "primary"; size: "sm"; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/Dashboard.tsx(10,50): error TS2307: Cannot find module '@ffx/blueprints' or its corresponding type declarations.
+components/blueprints/consulting-site/pages/Dashboard.tsx(216,13): error TS2322: Type '{ children: Element[]; variant: "primary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/Dashboard.tsx(224,13): error TS2322: Type '{ children: Element[]; variant: "secondary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/Dashboard.tsx(232,13): error TS2322: Type '{ children: Element[]; variant: "secondary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/Dashboard.tsx(246,45): error TS2322: Type '{ children: string; variant: "ghost"; size: "sm"; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/POSPage.tsx(87,25): error TS2322: Type '{ onCheckout: (orderData: any) => void; }' is not assignable to type 'IntrinsicAttributes & POSDashboardProps'.
+  Property 'onCheckout' does not exist on type 'IntrinsicAttributes & POSDashboardProps'.
+components/blueprints/consulting-site/pages/POSPage.tsx(99,47): error TS2322: Type '{ children: string; variant: "ghost"; size: "sm"; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/POSPage.tsx(219,13): error TS2322: Type '{ children: Element[]; variant: "primary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/POSPage.tsx(227,13): error TS2322: Type '{ children: Element[]; variant: "secondary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/POSPage.tsx(235,13): error TS2322: Type '{ children: Element[]; variant: "secondary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/POSPage.tsx(243,13): error TS2322: Type '{ children: Element[]; variant: "secondary"; className: string; href: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'href' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'. Did you mean 'ref'?
+components/blueprints/consulting-site/pages/SettingsPage.tsx(176,20): error TS2741: Property 'label' is missing in type '{ id: string; type: "text"; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; placeholder: string; }' but required in type 'InputFieldProps'.
+components/blueprints/consulting-site/pages/SettingsPage.tsx(190,20): error TS2741: Property 'label' is missing in type '{ id: string; type: "text"; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; placeholder: string; }' but required in type 'InputFieldProps'.
+components/blueprints/consulting-site/pages/SettingsPage.tsx(204,20): error TS2741: Property 'label' is missing in type '{ id: string; type: "email"; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; placeholder: string; }' but required in type 'InputFieldProps'.
+components/blueprints/consulting-site/pages/SettingsPage.tsx(218,20): error TS2741: Property 'label' is missing in type '{ id: string; type: "tel"; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; placeholder: string; }' but required in type 'InputFieldProps'.
+components/blueprints/consulting-site/pages/SettingsPage.tsx(232,20): error TS2741: Property 'label' is missing in type '{ id: string; type: "text"; value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void; placeholder: string; }' but required in type 'InputFieldProps'.
+components/blueprints/index.ts(36,1): error TS2308: Module "./billing" has already exported a member named 'SubscriptionPlan'. Consider explicitly re-exporting to resolve the ambiguity.
+components/blueprints/messaging/hooks/useCampaigns.ts(136,51): error TS2367: This comparison appears to be unintentional because the types '"draft" | "scheduled" | "sending" | "paused" | "cancelled"' and '"failed"' have no overlap.
+components/blueprints/messaging/hooks/useCampaigns.ts(167,44): error TS2367: This comparison appears to be unintentional because the types '"draft" | "scheduled" | "sending" | "sent" | "paused" | "cancelled"' and '"failed"' have no overlap.
+components/blueprints/messaging/hooks/useMessaging.ts(52,22): error TS2551: Property 'message_id' does not exist on type 'SendMessageResponse'. Did you mean 'messageId'?
+components/blueprints/messaging/hooks/useMessaging.ts(53,28): error TS2339: Property 'content' does not exist on type 'SendMessageRequest'.
+components/blueprints/messaging/hooks/useMessaging.ts(54,26): error TS2339: Property 'status' does not exist on type 'SendMessageResponse'.
+components/blueprints/messaging/hooks/useMessaging.ts(55,30): error TS2339: Property 'recipients' does not exist on type 'SendMessageResponse'.
+components/blueprints/messaging/hooks/useMessaging.ts(56,11): error TS2322: Type 'Date' is not assignable to type 'string'.
+components/blueprints/messaging/hooks/useMessaging.ts(57,27): error TS2339: Property 'listId' does not exist on type 'SendMessageRequest'.
+components/blueprints/messaging/hooks/useMessaging.ts(112,11): error TS2322: Type 'Date' is not assignable to type 'string'.
+components/blueprints/messaging/hooks/useMessaging.ts(120,11): error TS2322: Type 'Date' is not assignable to type 'string'.
+components/blueprints/messaging/index.ts(3,15): error TS2614: Module '"./MessageComposer"' has no exported member 'MessageComposerProps'. Did you mean to use 'import MessageComposerProps from "./MessageComposer"' instead?
+components/blueprints/messaging/index.ts(6,15): error TS2614: Module '"./ContactListUploader"' has no exported member 'ContactListUploaderProps'. Did you mean to use 'import ContactListUploaderProps from "./ContactListUploader"' instead?
+components/blueprints/messaging/index.ts(9,15): error TS2614: Module '"./MessagePreviewModal"' has no exported member 'MessagePreviewModalProps'. Did you mean to use 'import MessagePreviewModalProps from "./MessagePreviewModal"' instead?
+components/blueprints/messaging/index.ts(12,15): error TS2614: Module '"./MessageHistory"' has no exported member 'MessageHistoryProps'. Did you mean to use 'import MessageHistoryProps from "./MessageHistory"' instead?
+components/blueprints/messaging/index.ts(15,15): error TS2614: Module '"./AutoReplyManager"' has no exported member 'AutoReplyManagerProps'. Did you mean to use 'import AutoReplyManagerProps from "./AutoReplyManager"' instead?
+components/blueprints/messaging/index.ts(18,15): error TS2614: Module '"./MessagingDashboard"' has no exported member 'MessagingDashboardProps'. Did you mean to use 'import MessagingDashboardProps from "./MessagingDashboard"' instead?
+components/blueprints/messaging/MessagingDashboard.tsx(132,11): error TS2353: Object literal may only specify known properties, and 'content' does not exist in type 'SendMessageRequest'.
+components/blueprints/messaging/MessagingDashboard.tsx(134,33): error TS2339: Property 'scheduledFor' does not exist on type 'Message'.
+components/blueprints/messaging/MessagingDashboard.tsx(163,9): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/MessagingDashboard.tsx(166,32): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/MessagingDashboard.tsx(219,9): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/MessagingDashboard.tsx(222,32): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/MessagingDashboard.tsx(253,9): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/MessagingDashboard.tsx(256,32): error TS2304: Cannot find name 'slickTextService'.
+components/blueprints/messaging/services/apiClient.ts(164,27): error TS2339: Property 'listId' does not exist on type 'SendMessageRequest'.
+components/blueprints/messaging/services/apiClient.ts(165,28): error TS2339: Property 'content' does not exist on type 'SendMessageRequest'.
+components/blueprints/messaging/services/apiClient.ts(166,33): error TS2339: Property 'scheduledFor' does not exist on type 'SendMessageRequest'.
+components/blueprints/messaging/services/slicktext.ts(183,13): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(184,22): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(185,20): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(186,19): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(187,16): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(189,20): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(190,20): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(239,23): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(240,22): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(241,27): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(244,24): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(279,38): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(359,36): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/messaging/services/slicktext.ts(455,15): error TS18046: 'response.data' is of type 'unknown'.
+components/blueprints/pos/Cart.tsx(57,9): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+components/blueprints/pos/CheckoutSummary.tsx(70,26): error TS2345: Argument of type '{ address: { street?: string | undefined; city?: string | undefined; state?: string | undefined; zipCode?: string | undefined; country?: string | undefined; }; name?: string; email?: string; phone?: string; }' is not assignable to parameter of type 'SetStateAction<CustomerInfo>'.
+  Type '{ address: { street?: string | undefined; city?: string | undefined; state?: string | undefined; zipCode?: string | undefined; country?: string | undefined; }; name?: string; email?: string; phone?: string; }' is not assignable to type 'CustomerInfo'.
+    The types of 'address.street' are incompatible between these types.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+components/blueprints/pos/CheckoutSummary.tsx(73,28): error TS2345: Argument of type '{ address: { street?: string | undefined; city?: string | undefined; state?: string | undefined; zipCode?: string | undefined; country?: string | undefined; }; name?: string; email?: string; phone?: string; }' is not assignable to parameter of type 'CustomerInfo'.
+  The types of 'address.street' are incompatible between these types.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+components/blueprints/pos/CheckoutSummary.tsx(286,41): error TS2345: Argument of type '"street"' is not assignable to parameter of type 'never'.
+components/blueprints/pos/CheckoutSummary.tsx(299,43): error TS2345: Argument of type '"city"' is not assignable to parameter of type 'never'.
+components/blueprints/pos/CheckoutSummary.tsx(311,43): error TS2345: Argument of type '"state"' is not assignable to parameter of type 'never'.
+components/blueprints/pos/CheckoutSummary.tsx(325,43): error TS2345: Argument of type '"zipCode"' is not assignable to parameter of type 'never'.
+components/blueprints/pos/CheckoutSummary.tsx(337,43): error TS2345: Argument of type '"country"' is not assignable to parameter of type 'never'.
+components/blueprints/pos/hooks/useOrders.ts(180,5): error TS2561: Object literal may only specify known properties, but 'getOrdersByStatus' does not exist in type 'UseOrdersReturn'. Did you mean to write 'getOrdersByDate'?
+components/blueprints/pos/hooks/useProducts.ts(212,5): error TS2353: Object literal may only specify known properties, and 'categories' does not exist in type 'UseProductsReturn'.
+components/ui/InputField.tsx(118,13): error TS2345: Argument of type 'false | "" | 0 | "border-green-400 ring-1 ring-green-400 dark:border-green-600" | undefined' is not assignable to parameter of type 'string | false | null | undefined'.
+  Type '0' is not assignable to type 'string | false | null | undefined'.
+hooks/index.ts(32,3): error TS2305: Module '"../components/blueprints/messaging/types"' has no exported member 'UseMessagingReturn'.
+hooks/index.ts(33,3): error TS2305: Module '"../components/blueprints/messaging/types"' has no exported member 'UseContactsReturn'.
+hooks/index.ts(34,3): error TS2305: Module '"../components/blueprints/messaging/types"' has no exported member 'UseCampaignsReturn'.
+services/index.ts(13,34): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/slicktext.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+services/index.ts(14,31): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/stripe.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+services/index.ts(15,31): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/square.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+services/index.ts(16,33): error TS6307: File 'C:/Users/arvid/Documents/cursor-sprint-templates/backend/src/services/supabase.ts' is not listed within the file list of project 'C:/Users/arvid/Documents/cursor-sprint-templates/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+src/main.tsx(4,17): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+types/index.ts(96,8): error TS2307: Cannot find module '../components/billing/types' or its corresponding type declarations.

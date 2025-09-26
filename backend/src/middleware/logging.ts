@@ -4,7 +4,6 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { getEnvVar } from "../utils";
 
 // ============================================================================
 // Log Levels
@@ -205,7 +204,7 @@ export function requestLogger(
       ip: req.ip || req.connection.remoteAddress,
     });
 
-    originalEnd.call(this, chunk, encoding);
+    return originalEnd.call(this, chunk, encoding);
   };
 
   next();
@@ -268,7 +267,7 @@ export function slowRequestLogger(threshold: number = 1000) {
         });
       }
 
-      originalEnd.call(this, chunk, encoding);
+      return originalEnd.call(this, chunk, encoding);
     };
 
     next();
@@ -364,11 +363,21 @@ export function securityEventLogger(
       ? LogLevel.ERROR
       : LogLevel.WARN;
 
-  logger.writeLog(logLevel, "Security event", {
-    event,
-    severity,
-    userId,
-    ip,
-    ...metadata,
-  });
+  if (logLevel === LogLevel.ERROR) {
+    logger.error("Security event", undefined, {
+      event,
+      severity,
+      userId,
+      ip,
+      ...metadata,
+    });
+  } else {
+    logger.warn("Security event", {
+      event,
+      severity,
+      userId,
+      ip,
+      ...metadata,
+    });
+  }
 }

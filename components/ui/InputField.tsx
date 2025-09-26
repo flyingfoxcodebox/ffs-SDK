@@ -116,7 +116,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             error && "border-red-400 ring-1 ring-red-400 dark:border-red-600",
             // ✅ Success state styling (when no error and value exists)
             !error &&
-              rest.value &&
+              rest.value !== undefined &&
+              rest.value !== "" &&
               "border-green-400 ring-1 ring-green-400 dark:border-green-600",
             inputClassName
           )}

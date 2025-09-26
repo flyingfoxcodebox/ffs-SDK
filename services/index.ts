@@ -9,11 +9,8 @@
 // Backend Services (Primary)
 // ============================================================================
 
-// Export backend services as the primary implementations
-export { slicktextService } from "../backend/src/services/slicktext";
-export { stripeService } from "../backend/src/services/stripe";
-export { squareService } from "../backend/src/services/square";
-export { supabaseService } from "../backend/src/services/supabase";
+// Note: Backend services are not included in the main project scope
+// They are available in the backend directory separately
 
 // ============================================================================
 // Component Services (Secondary)
@@ -27,13 +24,17 @@ export {
 } from "../components/blueprints/messaging/services/slicktext";
 
 // ============================================================================
-// Integration Placeholders
+// Integration Services
 // ============================================================================
 
-// These are placeholder integrations - replace with actual implementations
+// Export integration services
 export { default as HubSpotService } from "../integrations/hubspot";
 export { default as QuickBooksService } from "../integrations/quickbooks";
 export { default as XeroService } from "../integrations/xero";
+export { default as SlickTextIntegration } from "../integrations/slicktext";
+export { default as SquareIntegration } from "../integrations/square";
+export { default as StripeIntegration } from "../integrations/stripe";
+export { default as SupabaseIntegration } from "../integrations/supabase";
 
 // ============================================================================
 // Service Types
@@ -43,5 +44,5 @@ export type {
   SlickTextConfig,
   SlickTextResponse,
   SendMessageRequest,
-  // SubscribeContactRequest, // Temporarily commented out due to import issue
+  SubscribeContactRequest,
 } from "../components/blueprints/messaging/types";

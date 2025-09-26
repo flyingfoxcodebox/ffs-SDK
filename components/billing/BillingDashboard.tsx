@@ -117,7 +117,7 @@ function BillingDashboard({
       try {
         await onSelectPlan?.(planId);
         addToast("Plan updated successfully!", "success");
-      } catch (error) {
+      } catch {
         addToast("Failed to update plan. Please try again.", "error");
       }
     },
@@ -125,11 +125,16 @@ function BillingDashboard({
   );
 
   const handleAddPaymentMethod = useCallback(
-    async (cardDetails: any) => {
+    async (cardDetails: {
+      cardNumber: string;
+      expDate: string;
+      cvc: string;
+      cardName: string;
+    }) => {
       try {
         await onAddPaymentMethod?.(cardDetails);
         addToast("Payment method added successfully!", "success");
-      } catch (error) {
+      } catch {
         addToast("Failed to add payment method. Please try again.", "error");
       }
     },
@@ -137,11 +142,16 @@ function BillingDashboard({
   );
 
   const handleUpdatePaymentMethod = useCallback(
-    async (cardDetails: any) => {
+    async (cardDetails: {
+      cardNumber?: string;
+      expDate?: string;
+      cvc?: string;
+      cardName?: string;
+    }) => {
       try {
         await onUpdatePaymentMethod?.(cardDetails);
         addToast("Payment method updated successfully!", "success");
-      } catch (error) {
+      } catch {
         addToast("Failed to update payment method. Please try again.", "error");
       }
     },
@@ -218,7 +228,11 @@ function BillingDashboard({
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveSection(item.id as any)}
+                onClick={() =>
+                  setActiveSection(
+                    item.id as "overview" | "plans" | "payment" | "invoices"
+                  )
+                }
                 className={cx(
                   "flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
                   activeSection === item.id
@@ -260,9 +274,12 @@ function BillingDashboard({
                 </p>
               </div>
               <PlanSelector
-                plans={plans}
-                onSelectPlan={handleSelectPlan}
-                currentPlanId={billingData?.plan.id}
+                plans={plans.map((plan) => ({
+                  ...plan,
+                  billingCycle: plan.billingCycle || "monthly",
+                  features: plan.features || [],
+                }))}
+                onPlanSelect={handleSelectPlan}
               />
             </div>
           )}

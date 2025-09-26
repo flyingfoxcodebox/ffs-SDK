@@ -53,6 +53,8 @@ export interface ButtonProps
   className?: string;
   /** Button content */
   children: React.ReactNode;
+  /** If provided, renders as an anchor tag with href */
+  href?: string;
 }
 
 // ✅ Utility for merging Tailwind classes (handles conditional styling)
@@ -101,6 +103,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     className,
     children,
     disabled,
+    href,
     ...rest
   },
   ref
@@ -149,6 +152,28 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   );
 
   const isDisabled = disabled || loading;
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={baseStyles}
+        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {loading && (
+          <>
+            <Spinner
+              size={getSpinnerSize(size)}
+              color={getSpinnerColor(variant)}
+              aria-label="Loading"
+            />
+            {loadingText && <span>{loadingText}</span>}
+          </>
+        )}
+        {!loading && children}
+      </a>
+    );
+  }
 
   return (
     <button

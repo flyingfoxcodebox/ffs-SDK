@@ -20,6 +20,7 @@ const mockPlans: SubscriptionPlan[] = [
     name: "Basic Plan",
     description: "Perfect for small businesses getting started",
     price: 29,
+    currency: "USD",
     billingCycle: "monthly",
     features: [
       "Up to 1,000 messages/month",
@@ -34,6 +35,7 @@ const mockPlans: SubscriptionPlan[] = [
     name: "Professional Plan",
     description: "Ideal for growing businesses with advanced needs",
     price: 79,
+    currency: "USD",
     billingCycle: "monthly",
     features: [
       "Up to 10,000 messages/month",
@@ -49,6 +51,7 @@ const mockPlans: SubscriptionPlan[] = [
     name: "Enterprise Plan",
     description: "For large organizations with custom requirements",
     price: 199,
+    currency: "USD",
     billingCycle: "monthly",
     features: [
       "Unlimited messages",

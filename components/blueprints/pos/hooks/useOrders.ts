@@ -60,8 +60,8 @@ const MOCK_ORDERS: Order[] = [
 
 export function useOrders(initialOrders?: Order[]): UseOrdersReturn {
   const [orders, setOrders] = useState<Order[]>(initialOrders || MOCK_ORDERS);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   // Add a new order
   const addOrder = useCallback((order: Order) => {
@@ -142,7 +142,11 @@ export function useOrders(initialOrders?: Order[]): UseOrdersReturn {
   const topSellingProducts = useMemo(() => {
     const productSales = new Map<
       string,
-      { product: any; quantity: number; revenue: number }
+      {
+        product: { id: string; name: string; price: number };
+        quantity: number;
+        revenue: number;
+      }
     >();
 
     orders

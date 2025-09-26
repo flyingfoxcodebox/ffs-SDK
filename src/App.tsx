@@ -63,6 +63,7 @@ export default function App() {
       id: "starter",
       name: "Starter",
       price: 0,
+      currency: "USD",
       description: "Perfect for individuals getting started",
       billingCycle: "monthly",
       features: [
@@ -76,6 +77,7 @@ export default function App() {
       id: "professional",
       name: "Professional",
       price: 19.99,
+      currency: "USD",
       description: "Ideal for professionals and small teams",
       billingCycle: "monthly",
       features: [
@@ -92,6 +94,7 @@ export default function App() {
       id: "enterprise",
       name: "Enterprise",
       price: 49.99,
+      currency: "USD",
       description: "For growing businesses and teams",
       billingCycle: "monthly",
       features: [

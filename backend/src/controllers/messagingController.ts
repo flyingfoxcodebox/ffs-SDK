@@ -4,7 +4,7 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest, SendSMSRequest, Contact } from "../types";
+import { AuthenticatedRequest, SendSMSRequest } from "../types";
 import { slicktextService } from "../services";
 import {
   formatSuccessResponse,
@@ -78,13 +78,15 @@ export class MessagingController {
       }
 
       // Log SMS sending
-      businessEventLogger("sms_sent", userId, {
-        message_id: sendResult.data.id,
-        list_id: targetListId,
-        content_length: content.length,
-        campaign_name: campaignName,
-        scheduled_for: scheduledFor,
-      });
+      if (sendResult.data) {
+        businessEventLogger("sms_sent", userId, {
+          message_id: sendResult.data.id,
+          list_id: targetListId,
+          content_length: content.length,
+          campaign_name: campaignName,
+          scheduled_for: scheduledFor,
+        });
+      }
 
       const response = formatSuccessResponse(
         sendResult.data,
@@ -207,11 +209,13 @@ export class MessagingController {
       }
 
       // Log contact subscription
-      businessEventLogger("contact_subscribed", userId, {
-        list_id: listId,
-        phone: phone,
-        subscriber_id: subscribeResult.data.id,
-      });
+      if (subscribeResult.data) {
+        businessEventLogger("contact_subscribed", userId, {
+          list_id: listId,
+          phone: phone,
+          subscriber_id: subscribeResult.data.id,
+        });
+      }
 
       const response = formatSuccessResponse(
         subscribeResult.data,
@@ -362,10 +366,7 @@ export class MessagingController {
       const offset = parseInt(req.query.offset as string) || 0;
 
       // Get campaigns from SlickText
-      const campaignsResult = await slicktextService.getCampaigns(
-        limit,
-        offset
-      );
+      const campaignsResult = await slicktextService.getCampaigns();
       if (!campaignsResult.success) {
         throw createValidationError("Failed to retrieve campaigns");
       }
@@ -414,11 +415,13 @@ export class MessagingController {
       }
 
       // Log auto-reply creation
-      businessEventLogger("auto_reply_created", userId, {
-        auto_reply_id: autoReplyResult.data.id,
-        keyword: keyword,
-        is_active: autoReplyResult.data.is_active,
-      });
+      if (autoReplyResult.data) {
+        businessEventLogger("auto_reply_created", userId, {
+          auto_reply_id: autoReplyResult.data.id,
+          keyword: keyword,
+          is_active: autoReplyResult.data.is_active,
+        });
+      }
 
       const response = formatSuccessResponse(
         autoReplyResult.data,

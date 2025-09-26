@@ -27,12 +27,7 @@ export { useInvoices } from "../components/billing/hooks/useInvoices";
 // Hook Types
 // ============================================================================
 
-export type {
-  // Messaging Hook Types
-  UseMessagingReturn,
-  UseContactsReturn,
-  UseCampaignsReturn,
-} from "../components/blueprints/messaging/types";
+// Note: Hook return types are defined inline in the hook files
 
 export type {
   // POS Hook Types
@@ -40,3 +35,13 @@ export type {
   UseProductsReturn,
   UseOrdersReturn,
 } from "../components/blueprints/pos/types";
+
+export type {
+  // Billing Hook Types
+  BillingData,
+} from "../components/billing/hooks/useBillingData";
+
+export type {
+  // Invoice Types
+  Invoice,
+} from "../components/billing/hooks/useInvoices";

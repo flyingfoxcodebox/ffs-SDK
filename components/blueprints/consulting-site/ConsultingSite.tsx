@@ -169,8 +169,6 @@ const defaultNavigation: NavigationConfig = {
 export const ConsultingSite: React.FC<ConsultingSiteProps> = ({
   config,
   user = mockUser,
-  onUserUpdate,
-  onConfigUpdate,
 }) => {
   const [currentPage, setCurrentPage] = useState<
     "dashboard" | "messaging" | "billing" | "pos" | "settings"
@@ -180,17 +178,29 @@ export const ConsultingSite: React.FC<ConsultingSiteProps> = ({
   const renderPage = () => {
     switch (currentPage) {
       case "dashboard":
-        return <Dashboard stats={mockStats} recentActivity={mockActivity} />;
+        return (
+          <Dashboard
+            stats={mockStats}
+            recentActivity={mockActivity}
+            children={undefined}
+          />
+        );
       case "messaging":
-        return <MessagingPage />;
+        return <MessagingPage children={undefined} />;
       case "billing":
-        return <BillingPage />;
+        return <BillingPage children={undefined} />;
       case "pos":
-        return <POSPage />;
+        return <POSPage children={undefined} />;
       case "settings":
-        return <SettingsPage />;
+        return <SettingsPage children={undefined} />;
       default:
-        return <Dashboard stats={mockStats} recentActivity={mockActivity} />;
+        return (
+          <Dashboard
+            stats={mockStats}
+            recentActivity={mockActivity}
+            children={undefined}
+          />
+        );
     }
   };
 
@@ -218,7 +228,16 @@ export const ConsultingSite: React.FC<ConsultingSiteProps> = ({
             ].map((page) => (
               <button
                 key={page.id}
-                onClick={() => setCurrentPage(page.id as any)}
+                onClick={() =>
+                  setCurrentPage(
+                    page.id as
+                      | "dashboard"
+                      | "messaging"
+                      | "billing"
+                      | "pos"
+                      | "settings"
+                  )
+                }
                 className={cx(
                   "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
                   currentPage === page.id

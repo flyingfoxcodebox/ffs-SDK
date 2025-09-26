@@ -8,13 +8,12 @@ import {
   AuthenticatedRequest,
   LoginRequest,
   SignupRequest,
-  User,
   AuthTokens,
+  UserRole,
 } from "../types";
 import { supabaseService } from "../services";
 import {
   formatSuccessResponse,
-  formatErrorResponse,
   createAuthError,
   createValidationError,
   businessEventLogger,
@@ -35,8 +34,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { email, password, firstName, lastName, role } =
-        req.body as SignupRequest;
+      const { email, firstName, lastName, role } = req.body as SignupRequest;
 
       // Check if user already exists
       const existingUser = await supabaseService.getUserByEmail(email);
@@ -49,10 +47,10 @@ export class AuthController {
         email,
         firstName,
         lastName,
-        role: role || "user",
+        role: role || UserRole.USER,
       });
 
-      if (!userResult.success) {
+      if (!userResult.success || !userResult.data) {
         throw createValidationError("Failed to create user account");
       }
 
@@ -111,6 +109,9 @@ export class AuthController {
       }
 
       const user = authResult.data;
+      if (!user) {
+        throw createAuthError("User data not found");
+      }
 
       // Check if user is active
       if (!user.isActive) {
@@ -246,7 +247,7 @@ export class AuthController {
         throw createAuthError("User not authenticated");
       }
 
-      const { currentPassword, newPassword } = req.body;
+      const { newPassword } = req.body;
 
       // Validate new password
       if (!newPassword || newPassword.length < 8) {
@@ -377,15 +378,17 @@ export class AuthController {
       // This would typically involve generating a reset token and sending an email
 
       // Log password reset request
-      securityEventLogger(
-        "password_reset_requested",
-        "medium",
-        userResult.data.id,
-        req.ip,
-        {
-          email: userResult.data.email,
-        }
-      );
+      if (userResult.data) {
+        securityEventLogger(
+          "password_reset_requested",
+          "medium",
+          userResult.data.id,
+          req.ip,
+          {
+            email: userResult.data.email,
+          }
+        );
+      }
 
       // Return success response
       const response = formatSuccessResponse(

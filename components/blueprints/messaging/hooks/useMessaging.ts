@@ -2,9 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { messagingApiClient } from "../services/apiClient";
 import type {
   Message,
-  Contact,
   Campaign,
-  AutoReply,
   SendMessageRequest,
   SubscribeContactRequest,
 } from "../types";
@@ -17,7 +15,7 @@ import type {
 
 export const useMessaging = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [serviceStatus, setServiceStatus] = useState<{
@@ -49,12 +47,15 @@ export const useMessaging = () => {
 
         // Convert the result to our Message format
         const newMessage: Message = {
-          id: result.message_id || `msg_${Date.now()}`,
-          content: request.content,
+          id: result.messageId || result.message_id || `msg_${Date.now()}`,
+          content: request.message,
+          segments: [],
+          recipientCount: result.recipientCount || 0,
           status: result.status || "sent",
-          recipients: result.recipients || 0,
-          sentAt: new Date(),
-          listId: request.listId,
+          createdAt: new Date().toISOString(),
+          sentAt: new Date().toISOString(),
+          cost: result.estimatedCost || 0,
+          currency: "USD",
         };
 
         // Add to messages list
@@ -107,18 +108,24 @@ export const useMessaging = () => {
         {
           id: "msg_1",
           content: "Welcome to our service!",
+          segments: [],
+          recipientCount: 150,
           status: "sent",
-          recipients: 150,
-          sentAt: new Date(Date.now() - 86400000), // 1 day ago
-          listId: "list_1",
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+          sentAt: new Date(Date.now() - 86400000).toISOString(),
+          cost: 15.0,
+          currency: "USD",
         },
         {
           id: "msg_2",
           content: "Special offer: 20% off your next order!",
+          segments: [],
+          recipientCount: 89,
           status: "sent",
-          recipients: 89,
-          sentAt: new Date(Date.now() - 172800000), // 2 days ago
-          listId: "list_1",
+          createdAt: new Date(Date.now() - 172800000).toISOString(),
+          sentAt: new Date(Date.now() - 172800000).toISOString(),
+          cost: 8.9,
+          currency: "USD",
         },
       ];
 

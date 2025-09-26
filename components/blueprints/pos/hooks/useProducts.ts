@@ -126,8 +126,8 @@ export function useProducts(initialProducts?: Product[]): UseProductsReturn {
   const [products, setProducts] = useState<Product[]>(
     initialProducts || MOCK_PRODUCTS
   );
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   // Add a new product
   const addProduct = useCallback((product: Product) => {
@@ -179,7 +179,9 @@ export function useProducts(initialProducts?: Product[]): UseProductsReturn {
   // Get unique categories
   const categories = useMemo(() => {
     const uniqueCategories = new Set(
-      products.map((product) => product.category).filter(Boolean)
+      products
+        .map((product) => product.category)
+        .filter((cat): cat is string => Boolean(cat))
     );
     return Array.from(uniqueCategories).sort();
   }, [products]);

@@ -27,10 +27,22 @@ export * from "./auth";
 // Billing Blueprint
 // ============================================================================
 
-export * from "./billing";
+export { default as CheckoutPanel } from "./billing/CheckoutPanel";
+export type {
+  CheckoutPanelProps,
+  TCheckoutPanelProps,
+  SubscriptionPlan as BillingSubscriptionPlan,
+  TSubscriptionPlan,
+  CheckoutData,
+  TCheckoutData,
+} from "./billing/CheckoutPanel";
 
 // ============================================================================
 // Consulting Site Archetype
 // ============================================================================
 
-export * from "./consulting-site";
+// Export consulting site components and types
+export { ConsultingSite } from "./consulting-site";
+export * from "./consulting-site/layout";
+export * from "./consulting-site/pages";
+export type * from "./consulting-site/types";

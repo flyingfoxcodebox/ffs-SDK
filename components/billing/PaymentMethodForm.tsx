@@ -22,6 +22,21 @@ export interface PaymentMethodFormProps {
   title?: string;
   /** Whether to show the cancel button */
   showCancelButton?: boolean;
+  /** Callback when payment method is added */
+  onAddPaymentMethod?: (cardDetails: any) => Promise<void>;
+  /** Callback when payment method is updated */
+  onUpdatePaymentMethod?: (cardDetails: any) => Promise<void>;
+  /** Current payment method */
+  currentPaymentMethod?: {
+    id: string;
+    type: "card" | "bank" | "paypal";
+    last4?: string;
+    brand?: string;
+    expiryMonth?: number;
+    expiryYear?: number;
+    name?: string;
+    isDefault: boolean;
+  } | null;
 }
 
 // ✅ Utility for merging Tailwind classes

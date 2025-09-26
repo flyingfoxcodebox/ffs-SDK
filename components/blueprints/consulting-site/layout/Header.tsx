@@ -9,9 +9,6 @@ import React, { useState } from "react";
 import { Button, Modal } from "@ffx/components";
 import type { HeaderProps } from "../types";
 
-const cx = (...classes: Array<string | false | null | undefined>) =>
-  classes.filter(Boolean).join(" ");
-
 export const Header: React.FC<HeaderProps> = ({
   user,
   onMenuToggle,

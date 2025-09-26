@@ -9,6 +9,7 @@ import {
   CreateOrderRequest,
   Order,
   Product,
+  OrderStatus,
 } from "../types";
 import { squareService, supabaseService } from "../services";
 import {
@@ -16,7 +17,6 @@ import {
   createValidationError,
   createNotFoundError,
   businessEventLogger,
-  securityEventLogger,
 } from "../utils";
 
 // ============================================================================
@@ -216,7 +216,7 @@ export class POSController {
         discountCode: discountCode || undefined,
         customerInfo,
         paymentMethod: paymentMethod.type,
-        status: "pending",
+        status: OrderStatus.PENDING,
       };
 
       // Save order to database
@@ -226,6 +226,10 @@ export class POSController {
       }
 
       const order = orderResult.data;
+
+      if (!order) {
+        throw createValidationError("Order not found");
+      }
 
       // Process payment
       const paymentResult = await squareService.processPayment(

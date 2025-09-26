@@ -121,7 +121,7 @@ function PlanSelector({
       try {
         await onPlanSelect(planId);
         addToast("Plan selected successfully!", "success");
-      } catch (error) {
+      } catch {
         addToast("Failed to select plan. Please try again.", "error");
       } finally {
         setIsSubmitting(false);

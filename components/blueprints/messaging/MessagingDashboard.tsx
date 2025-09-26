@@ -3,11 +3,11 @@ import { Button, Toast } from "@ffx/components/ui";
 import {
   MessageComposer,
   ContactListUploader,
-  MessagePreviewModal,
   MessageHistory,
   AutoReplyManager,
 } from "./";
 import { messagingApiClient } from "./services/apiClient";
+import { slickTextService } from "./services/slicktext";
 import { useMessaging } from "./hooks/useMessaging";
 import { useContacts } from "./hooks/useContacts";
 import type {
@@ -15,7 +15,6 @@ import type {
   Message,
   Contact,
   Campaign,
-  SlickTextConfig,
   AutoReply,
 } from "./types";
 
@@ -30,15 +29,11 @@ const cx = (...classes: Array<string | false | null | undefined>) =>
 
 const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
   slickTextConfig,
-  onConfigUpdate,
   className,
 }) => {
   const [activeSection, setActiveSection] = useState<
     "compose" | "contacts" | "history" | "autoreply" | "settings"
   >("compose");
-  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const [previewMessage, setPreviewMessage] = useState<Message | null>(null);
   const [serviceStatus, setServiceStatus] = useState<{
     usingMocks: boolean;
     service: "mock" | "real";
@@ -54,21 +49,13 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
 
   // Initialize messaging hooks
   const {
-    messages,
-    loading: messagingLoading,
-    error: messagingError,
     sendMessage,
     serviceStatus: messagingServiceStatus,
     switchToMockMode,
     switchToRealMode,
   } = useMessaging();
 
-  const {
-    contacts,
-    loading: contactsLoading,
-    error: contactsError,
-    subscribeContact,
-  } = useContacts();
+  useContacts();
 
   // ✅ Toast management
   const addToast = useCallback(
@@ -92,8 +79,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
       try {
         const status = await messagingApiClient.getServiceStatus();
         setServiceStatus(status);
-      } catch (error) {
-        console.error("Failed to load service status:", error);
+      } catch {
+        console.error("Failed to load service status");
       }
     };
     loadStatus();
@@ -117,7 +104,7 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
           await switchToRealMode();
           addToast("Switched to real API mode", "info");
         }
-      } catch (error) {
+      } catch {
         addToast("Failed to switch mode", "error");
       }
     },
@@ -129,9 +116,9 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
     async (message: Message, recipients: Contact[]) => {
       try {
         await sendMessage({
-          content: message.content,
-          listId: "list_1", // Default list ID for now
-          scheduledFor: message.scheduledFor,
+          message: message.content,
+          recipients: recipients.map((contact) => contact.phoneNumber),
+          scheduledAt: message.scheduledAt,
         });
 
         addToast(
@@ -139,8 +126,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
           "success"
         );
         setActiveSection("history");
-      } catch (error) {
-        console.error("Send message error:", error);
+      } catch {
+        console.error("Send message error");
         addToast("Failed to send message. Please try again.", "error");
       }
     },
@@ -180,8 +167,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         } else {
           addToast(`Failed to schedule message: ${response.error}`, "error");
         }
-      } catch (error) {
-        console.error("Schedule message error:", error);
+      } catch {
+        console.error("Schedule message error");
         addToast("Failed to schedule message. Please try again.", "error");
       }
     },
@@ -195,8 +182,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         // In a real app, this would save to a database
         console.log("Saving draft:", message);
         addToast("Draft saved successfully!", "success");
-      } catch (error) {
-        console.error("Save draft error:", error);
+      } catch {
+        console.error("Save draft error");
         addToast("Failed to save draft. Please try again.", "error");
       }
     },
@@ -221,7 +208,7 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         // Upload contacts via SlickText
         const response = await slickTextService.uploadContacts(contacts);
 
-        if (response.success) {
+        if (response.success && response.data) {
           addToast(
             `Successfully uploaded ${response.data.successCount} contacts!`,
             "success"
@@ -229,8 +216,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         } else {
           addToast(`Failed to upload contacts: ${response.error}`, "error");
         }
-      } catch (error) {
-        console.error("Upload contacts error:", error);
+      } catch {
+        console.error("Upload contacts error");
         addToast("Failed to upload contacts. Please try again.", "error");
       }
     },
@@ -263,8 +250,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         } else {
           addToast(`Failed to create auto-reply: ${response.error}`, "error");
         }
-      } catch (error) {
-        console.error("Save auto-reply error:", error);
+      } catch {
+        console.error("Save auto-reply error");
         addToast("Failed to save auto-reply. Please try again.", "error");
       }
     },
@@ -278,8 +265,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
         // In a real app, this would call the SlickText API
         console.log("Deleting auto-reply:", autoReplyId);
         addToast("Auto-reply deleted successfully!", "success");
-      } catch (error) {
-        console.error("Delete auto-reply error:", error);
+      } catch {
+        console.error("Delete auto-reply error");
         addToast("Failed to delete auto-reply. Please try again.", "error");
       }
     },
@@ -296,8 +283,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
           `Auto-reply ${isActive ? "enabled" : "disabled"} successfully!`,
           "success"
         );
-      } catch (error) {
-        console.error("Toggle auto-reply error:", error);
+      } catch {
+        console.error("Toggle auto-reply error");
         addToast("Failed to update auto-reply. Please try again.", "error");
       }
     },
@@ -319,8 +306,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
       try {
         console.log("Resending campaign:", campaign);
         addToast(`Resending campaign: ${campaign.name}`, "info");
-      } catch (error) {
-        console.error("Resend campaign error:", error);
+      } catch {
+        console.error("Resend campaign error");
         addToast("Failed to resend campaign. Please try again.", "error");
       }
     },
@@ -336,8 +323,8 @@ const MessagingDashboard: React.FC<MessagingDashboardProps> = ({
           `Campaign "${campaign.name}" deleted successfully!`,
           "success"
         );
-      } catch (error) {
-        console.error("Delete campaign error:", error);
+      } catch {
+        console.error("Delete campaign error");
         addToast("Failed to delete campaign. Please try again.", "error");
       }
     },

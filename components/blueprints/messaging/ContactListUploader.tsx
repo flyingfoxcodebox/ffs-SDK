@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from "react";
-import { Button, FormGroup, Toast } from "@ffx/components/ui";
+import { Button, Toast } from "@ffx/components/ui";
 import type {
   ContactListUploaderProps,
   Contact,
@@ -28,7 +28,6 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
   const [uploadResult, setUploadResult] = useState<ContactUploadResult | null>(
     null
   );
-  const [previewContacts, setPreviewContacts] = useState<Contact[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [toast, setToast] = useState<{
     message: string;
@@ -70,6 +69,7 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
 
       processFile(file);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [maxFileSize, allowedFormats]
   );
 
@@ -78,7 +78,6 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
     async (file: File) => {
       setIsUploading(true);
       setUploadResult(null);
-      setPreviewContacts([]);
 
       try {
         const contacts = await parseFile(file);
@@ -87,7 +86,6 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
           : validateContacts(contacts);
 
         setUploadResult(result);
-        setPreviewContacts(result.validContacts);
         setShowPreview(true);
 
         if (result.success) {
@@ -117,6 +115,7 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
         setIsUploading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [onValidate]
   );
 
@@ -138,6 +137,7 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
       reader.onerror = () => reject(new Error("Failed to read file"));
       reader.readAsText(file);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ✅ Parse CSV content
@@ -261,6 +261,8 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
         validContacts,
         errors,
         duplicates,
+        successCount: validContacts.length,
+        errorCount: errors.length,
       };
     },
     []
@@ -279,7 +281,6 @@ const ContactListUploader: React.FC<ContactListUploaderProps> = ({
       });
       setShowPreview(false);
       setUploadResult(null);
-      setPreviewContacts([]);
     } catch (error) {
       console.error("Upload error:", error);
       setToast({

@@ -41,10 +41,12 @@ export interface SubscriptionPlan {
   name: string;
   /** Price per billing cycle */
   price: number;
+  /** Currency code */
+  currency: string;
   /** Description of the plan features */
   description: string;
   /** Billing cycle (monthly, yearly, etc.) */
-  billingCycle?: "monthly" | "yearly" | "one-time";
+  billingCycle: "monthly" | "yearly" | "one-time";
   /** Array of features included in this plan */
   features?: string[];
   /** Whether this plan is popular/recommended */

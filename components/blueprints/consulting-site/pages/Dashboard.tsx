@@ -6,8 +6,7 @@
  */
 
 import React from "react";
-import { Button, Toast } from "@ffx/components";
-import { MessagingDashboard, POSDashboard } from "@ffx/blueprints";
+import { Button } from "@ffx/components";
 import type { HomePageProps, DashboardStats, ActivityItem } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>

@@ -53,11 +53,11 @@ export interface CustomerInfo {
   email?: string;
   phone?: string;
   address?: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
   };
 }
 
@@ -97,7 +97,7 @@ export interface CartProps {
   onUpdateQuantity: (productId: string, quantity: number) => void;
   onRemoveItem: (productId: string) => void;
   onClearCart: () => void;
-  onApplyDiscount?: (code: string) => void;
+  onApplyDiscount?: (code: string) => boolean;
   loading?: boolean;
   className?: string;
 }
@@ -117,17 +117,6 @@ export interface PaymentButtonProps {
   onPayment: (paymentMethod: PaymentMethod) => Promise<void>;
   loading?: boolean;
   disabled?: boolean;
-  className?: string;
-}
-
-export interface POSDashboardProps {
-  products: Product[];
-  onProductUpdate?: (product: Product) => void;
-  onOrderComplete?: (order: Order) => void;
-  onPaymentProcess?: (
-    order: Order,
-    paymentMethod: PaymentMethod
-  ) => Promise<void>;
   className?: string;
 }
 
@@ -153,6 +142,9 @@ export interface UseProductsReturn {
   removeProduct: (productId: string) => void;
   searchProducts: (query: string) => Product[];
   filterByCategory: (category: string) => Product[];
+  categories: string[];
+  availableProducts: Product[];
+  lowStockProducts: Product[];
 }
 
 export interface UseOrdersReturn {
@@ -163,6 +155,16 @@ export interface UseOrdersReturn {
   updateOrder: (orderId: string, updates: Partial<Order>) => void;
   getOrder: (orderId: string) => Order | undefined;
   getOrdersByDate: (date: Date) => Order[];
+  getOrdersByStatus: (status: Order["status"]) => Order[];
+  todaysOrders: Order[];
+  todaysTotal: number;
+  todaysOrderCount: number;
+  averageOrderValue: number;
+  topSellingProducts: Array<{
+    product: { id: string; name: string; price: number };
+    quantity: number;
+    revenue: number;
+  }>;
 }
 
 // Configuration Types
@@ -184,6 +186,19 @@ export interface POSEvent {
     | "checkout_started"
     | "payment_processed"
     | "order_completed";
-  data: any;
+  data: Record<string, unknown>;
   timestamp: Date;
+}
+
+// Component Props
+export interface POSDashboardProps {
+  products?: Product[];
+  onProductUpdate?: (product: Product) => void;
+  onOrderComplete?: (order: Order) => void;
+  onPaymentProcess?: (
+    order: Order,
+    paymentMethod: PaymentMethod
+  ) => Promise<void>;
+  onCheckout?: (orderData: Record<string, unknown>) => void;
+  className?: string;
 }

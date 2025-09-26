@@ -93,7 +93,7 @@ export type {
   InvoiceListProps,
   SubscriptionStatusBannerProps,
   BillingDashboardProps,
-} from "../components/billing/types";
+} from "../components/billing";
 
 // Auth Blueprint Types
 export type { AuthPanelProps } from "../components/blueprints/auth/AuthPanel";

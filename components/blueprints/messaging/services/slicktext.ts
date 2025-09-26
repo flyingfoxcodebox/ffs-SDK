@@ -12,9 +12,12 @@ import type {
   SendMessageResponse,
   Contact,
   Campaign,
-  Message,
   AutoReply,
   SlickTextWebhook,
+  SlickTextContactResponse,
+  SlickTextMessageResponse,
+  SlickTextCampaignResponse,
+  SlickTextListResponse,
 } from "../types";
 
 // ✅ SMS Character Limits
@@ -37,39 +40,6 @@ interface SlickTextApiResponse<T = unknown> {
   data?: T;
   error?: string;
   message?: string;
-}
-
-interface SlickTextContact {
-  id: string;
-  phone_number: string;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  custom_fields?: Record<string, string>;
-  is_opted_in: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface SlickTextList {
-  id: string;
-  name: string;
-  description?: string;
-  contact_count: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface SlickTextMessage {
-  id: string;
-  content: string;
-  list_id: string;
-  contact_count: number;
-  status: "draft" | "scheduled" | "sending" | "sent" | "failed";
-  scheduled_at?: string;
-  sent_at?: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export class SlickTextService {
@@ -179,15 +149,16 @@ export class SlickTextService {
       }
 
       // Convert SlickText contact to our Contact type
+      const data = response.data as SlickTextContactResponse;
       const contact: Contact = {
-        id: response.data.id,
-        phoneNumber: response.data.phone_number,
-        firstName: response.data.first_name,
-        lastName: response.data.last_name,
-        email: response.data.email,
+        id: data.id,
+        phoneNumber: data.phone_number,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        email: data.email,
         tags: [], // Map custom fields to tags if needed
-        isOptedIn: response.data.is_opted_in,
-        createdAt: response.data.created_at,
+        isOptedIn: data.is_opted_in,
+        createdAt: data.created_at,
       };
 
       return {
@@ -233,15 +204,19 @@ export class SlickTextService {
         };
       }
 
+      const data = response.data as SlickTextMessageResponse;
       return {
         success: true,
         data: {
-          campaignId: response.data.id,
-          messageId: response.data.id,
-          recipientCount: response.data.contact_count || 0,
+          campaignId: data.id,
+          messageId: data.id,
+          message_id: data.id, // For API compatibility
+          recipientCount: data.contact_count || 0,
+          recipients: request.recipients,
+          status: "queued" as const,
           estimatedCost: this.calculateMessageSegments(request.message)
             .totalCost,
-          scheduledAt: response.data.scheduled_at,
+          scheduledAt: data.scheduled_at,
         },
       };
     } catch (error) {
@@ -276,17 +251,18 @@ export class SlickTextService {
         };
       }
 
-      const campaigns: Campaign[] = (response.data.messages || []).map(
-        (message: SlickTextMessage) => ({
-          id: message.id,
-          name: `Campaign ${message.id}`,
+      const data = response.data as { messages: SlickTextCampaignResponse[] };
+      const campaigns: Campaign[] = (data.messages || []).map(
+        (campaign: SlickTextCampaignResponse) => ({
+          id: campaign.id,
+          name: campaign.name,
           message: {
-            id: message.id,
-            content: message.content,
+            id: campaign.id,
+            content: campaign.message,
             segments: this.calculateMessageSegments(
-              message.content
+              campaign.message
             ).segments.map((segment, index) => ({
-              id: `${message.id}-${index}`,
+              id: `${campaign.id}-${index}`,
               content: segment.content,
               characterCount: segment.characterCount,
               isUnicode: segment.isUnicode,
@@ -294,29 +270,29 @@ export class SlickTextService {
                 ? SMS_PRICING.UNICODE
                 : SMS_PRICING.GSM_7BIT,
             })),
-            recipientCount: message.contact_count,
-            status: message.status,
-            createdAt: message.created_at,
-            scheduledAt: message.scheduled_at,
-            sentAt: message.sent_at,
-            cost: this.calculateMessageSegments(message.content).totalCost,
+            recipientCount: campaign.contact_count,
+            status: "sent" as const,
+            createdAt: campaign.scheduled_at || new Date().toISOString(),
+            scheduledAt: campaign.scheduled_at,
+            sentAt: campaign.sent_at,
+            cost: this.calculateMessageSegments(campaign.message).totalCost,
             currency: "USD",
           },
           recipients: [], // Would need separate call to get recipients
-          status: message.status,
-          scheduledAt: message.scheduled_at,
-          sentAt: message.sent_at,
+          status: "sent" as const,
+          scheduledAt: campaign.scheduled_at,
+          sentAt: campaign.sent_at,
           deliveryStats: {
-            totalSent: message.contact_count,
+            totalSent: campaign.contact_count,
             delivered: 0, // Would need separate call to get delivery stats
             failed: 0,
             pending: 0,
             deliveryRate: 0,
-            cost: this.calculateMessageSegments(message.content).totalCost,
+            cost: this.calculateMessageSegments(campaign.message).totalCost,
             currency: "USD",
           },
-          createdAt: message.created_at,
-          updatedAt: message.updated_at,
+          createdAt: campaign.scheduled_at || new Date().toISOString(),
+          updatedAt: campaign.sent_at || new Date().toISOString(),
         })
       );
 
@@ -356,8 +332,9 @@ export class SlickTextService {
         };
       }
 
-      const contacts: Contact[] = (response.data.subscribers || []).map(
-        (subscriber: SlickTextContact) => ({
+      const data = response.data as { subscribers: SlickTextContactResponse[] };
+      const contacts: Contact[] = (data.subscribers || []).map(
+        (subscriber: SlickTextContactResponse) => ({
           id: subscriber.id,
           phoneNumber: subscriber.phone_number,
           firstName: subscriber.first_name,
@@ -434,7 +411,7 @@ export class SlickTextService {
   /**
    * Get lists
    */
-  async getLists(): Promise<SlickTextResponse<SlickTextList[]>> {
+  async getLists(): Promise<SlickTextResponse<SlickTextListResponse[]>> {
     try {
       const response = await this.makeApiCall(
         `/brands/${this.config.accountId}/lists`,
@@ -450,9 +427,10 @@ export class SlickTextService {
         };
       }
 
+      const data = response.data as { lists: SlickTextListResponse[] };
       return {
         success: true,
-        data: response.data.lists || [],
+        data: data.lists || [],
       };
     } catch (error) {
       console.error("SlickText getLists error:", error);
@@ -562,7 +540,7 @@ export class SlickTextService {
   /**
    * Validate webhook signature
    */
-  validateWebhook(payload: string, signature: string): boolean {
+  validateWebhook(): boolean {
     // Implement webhook signature validation for API v2
     // This is a placeholder - implement based on SlickText's v2 webhook validation
     return true;
@@ -649,7 +627,12 @@ export class SlickTextService {
    */
   private containsUnicode(text: string): boolean {
     // Simple Unicode detection - can be enhanced
-    return /[^\u0000-\u007F]/.test(text);
+    for (let i = 0; i < text.length; i++) {
+      if (text.charCodeAt(i) > 127) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

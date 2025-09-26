@@ -22,6 +22,8 @@ export interface InvoiceListProps {
   title?: string;
   /** Callback when an invoice is downloaded */
   onInvoiceDownload?: (invoiceId: string) => void;
+  /** Callback when an invoice is downloaded (alias for compatibility) */
+  onDownloadInvoice?: (invoiceId: string) => void;
 }
 
 // ✅ Utility for merging Tailwind classes

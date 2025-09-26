@@ -7,7 +7,7 @@
 
 import React, { useState } from "react";
 import { Button, InputField, FormGroup, Toast, Modal } from "@ffx/components";
-import type { PageProps, SettingsFormData, UserPreferences } from "../types";
+import type { PageProps, SettingsFormData } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -82,7 +82,7 @@ export const SettingsPage: React.FC<PageProps> = ({
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       addToast("Settings saved successfully!", "success");
-    } catch (error) {
+    } catch {
       addToast("Failed to save settings. Please try again.", "error");
     } finally {
       setIsLoading(false);
@@ -99,7 +99,7 @@ export const SettingsPage: React.FC<PageProps> = ({
         "info"
       );
       setShowDeleteModal(false);
-    } catch (error) {
+    } catch {
       addToast(
         "Failed to initiate account deletion. Please try again.",
         "error"
@@ -176,6 +176,7 @@ export const SettingsPage: React.FC<PageProps> = ({
                   <InputField
                     id="firstName"
                     type="text"
+                    label="First Name"
                     value={settings.profile.firstName}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -190,6 +191,7 @@ export const SettingsPage: React.FC<PageProps> = ({
                   <InputField
                     id="lastName"
                     type="text"
+                    label="Last Name"
                     value={settings.profile.lastName}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -204,6 +206,7 @@ export const SettingsPage: React.FC<PageProps> = ({
                   <InputField
                     id="email"
                     type="email"
+                    label="Email Address"
                     value={settings.profile.email}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -218,6 +221,7 @@ export const SettingsPage: React.FC<PageProps> = ({
                   <InputField
                     id="phone"
                     type="tel"
+                    label="Phone Number"
                     value={settings.profile.phone || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -232,6 +236,7 @@ export const SettingsPage: React.FC<PageProps> = ({
                   <InputField
                     id="company"
                     type="text"
+                    label="Company"
                     value={settings.profile.company || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({

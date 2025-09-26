@@ -124,12 +124,7 @@ export interface PageProps {
   title?: string;
   description?: string;
   className?: string;
-  children: React.ReactNode;
-}
-
-export interface HomePageProps extends PageProps {
-  stats?: DashboardStats;
-  recentActivity?: ActivityItem[];
+  children?: React.ReactNode;
 }
 
 export interface AboutPageProps extends PageProps {
@@ -227,6 +222,20 @@ export interface ProtectedRouteProps {
   fallback?: React.ReactNode;
 }
 
+export interface HomePageProps {
+  title?: string;
+  description?: string;
+  stats?: DashboardStats;
+  recentActivity?: ActivityItem[];
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export interface PageProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
 // ============================================================================
 // Subscription Types
 // ============================================================================
@@ -236,6 +245,7 @@ export interface SubscriptionPlan {
   name: string;
   description: string;
   price: number;
+  currency: string;
   billingCycle: "monthly" | "yearly" | "one-time";
   features: string[];
   isPopular?: boolean;

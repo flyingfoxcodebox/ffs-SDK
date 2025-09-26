@@ -6,8 +6,6 @@
  */
 
 import type {
-  Message,
-  Contact,
   Campaign,
   AutoReply,
   SendMessageRequest,
@@ -161,9 +159,10 @@ export class MessagingApiClient {
       {
         method: "POST",
         body: JSON.stringify({
-          listId: request.listId,
-          content: request.content,
-          scheduledFor: request.scheduledFor?.toISOString(),
+          message: request.message,
+          recipients: request.recipients,
+          scheduledAt: request.scheduledAt,
+          campaignName: request.campaignName,
         }),
       }
     );
