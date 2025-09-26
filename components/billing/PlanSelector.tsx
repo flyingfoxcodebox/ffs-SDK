@@ -9,7 +9,7 @@ import { useBillingData } from "./hooks/useBillingData";
  * Allows users to select and upgrade/downgrade their current plan.
  */
 
-export interface SubscriptionPlan {
+export interface BillingSubscriptionPlan {
   /** Unique identifier for the plan */
   id: string;
   /** Display name of the plan */
@@ -34,7 +34,7 @@ export interface SubscriptionPlan {
 
 export interface PlanSelectorProps {
   /** Array of available subscription plans */
-  plans: SubscriptionPlan[];
+  plans: BillingSubscriptionPlan[];
   /** Callback when a plan is selected */
   onPlanSelect?: (planId: string) => void | Promise<void>;
   /** Custom CSS classes for the container */
@@ -135,7 +135,7 @@ function PlanSelector({
   };
 
   // ✅ Get plan button text and variant
-  const getPlanButtonProps = (plan: SubscriptionPlan) => {
+  const getPlanButtonProps = (plan: BillingSubscriptionPlan) => {
     if (isCurrentPlan(plan.id)) {
       return {
         text: "Current Plan",

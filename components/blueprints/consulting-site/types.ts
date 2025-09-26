@@ -240,7 +240,7 @@ export interface PageProps {
 // Subscription Types
 // ============================================================================
 
-export interface SubscriptionPlan {
+export interface ConsultingSubscriptionPlan {
   id: string;
   name: string;
   description: string;

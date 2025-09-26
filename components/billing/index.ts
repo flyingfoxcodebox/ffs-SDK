@@ -25,4 +25,4 @@ export { useInvoices } from "./hooks/useInvoices";
 export type { Invoice } from "./hooks/useInvoices";
 
 // ✅ Re-export from CheckoutPanel for convenience
-export type { SubscriptionPlan } from "../blueprints/billing/CheckoutPanel";
+export type { SubscriptionPlan as BillingSubscriptionPlan } from "../blueprints/billing/CheckoutPanel";

@@ -6,16 +6,10 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: {
-        index: resolve(__dirname, "index.ts"),
-        components: resolve(__dirname, "components/index.ts"),
-        blueprints: resolve(__dirname, "components/blueprints/index.ts"),
-        hooks: resolve(__dirname, "hooks/index.ts"),
-        services: resolve(__dirname, "services/index.ts"),
-        types: resolve(__dirname, "types/index.ts"),
-      },
+      entry: resolve(__dirname, "index.ts"),
+      name: "FlyingFoxSDK",
+      fileName: (format) => `index.${format}.js`,
       formats: ["es"],
-      fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
       external: ["react", "react-dom"],
@@ -26,8 +20,6 @@ export default defineConfig({
         },
       },
     },
-    outDir: "dist",
-    emptyOutDir: true,
   },
   resolve: {
     alias: {

@@ -9,12 +9,12 @@ import React, { useState } from "react";
 import BillingDashboard from "@ffx/components/billing/BillingDashboard";
 import CheckoutPanel from "@ffx/components/blueprints/billing/CheckoutPanel";
 import { Button, Toast } from "@ffx/components";
-import type { PageProps, SubscriptionPlan } from "../types";
+import type { PageProps, ConsultingSubscriptionPlan } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
 
-const mockPlans: SubscriptionPlan[] = [
+const mockPlans: ConsultingSubscriptionPlan[] = [
   {
     id: "basic",
     name: "Basic Plan",

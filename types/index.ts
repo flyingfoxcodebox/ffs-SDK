@@ -121,7 +121,6 @@ export type {
   ConsultingSiteConfig,
   ConsultingSiteProps,
   ProtectedRouteProps,
-  SubscriptionPlan,
   ApiResponse,
   PaginatedResponse,
 } from "../components/blueprints/consulting-site/types";

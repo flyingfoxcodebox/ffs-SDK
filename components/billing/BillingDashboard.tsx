@@ -6,7 +6,7 @@ import {
   InvoiceList,
   SubscriptionStatusBanner,
   useBillingData,
-  SubscriptionPlan,
+  BillingSubscriptionPlan,
 } from "@ffx/components/billing";
 import { Toast } from "@ffx/components/ui";
 
@@ -19,7 +19,7 @@ import { Toast } from "@ffx/components/ui";
 
 export interface BillingDashboardProps {
   /** Available subscription plans */
-  plans: SubscriptionPlan[];
+  plans: BillingSubscriptionPlan[];
   /** Callback when a plan is selected */
   onSelectPlan?: (planId: string) => void | Promise<void>;
   /** Callback when payment method is added */
