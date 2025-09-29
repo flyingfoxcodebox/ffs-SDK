@@ -5,6 +5,9 @@
  * This provides clean, consistent import paths for all components, hooks, services, and types.
  */
 
+// Import Tailwind CSS styles
+import "./src/index.css";
+
 // ============================================================================
 // 🧱 Atomic Components
 // ============================================================================

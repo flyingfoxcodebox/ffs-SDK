@@ -7,28 +7,31 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/index/index.es.js",
       "types": "./dist/index.d.ts"
     },
     "./components": {
-      "import": "./dist/components/index.js",
+      "import": "./dist/components/index.es.js",
       "types": "./dist/components/index.d.ts"
     },
     "./blueprints": {
-      "import": "./dist/blueprints/index.js",
+      "import": "./dist/blueprints/index.es.js",
       "types": "./dist/blueprints/index.d.ts"
     },
     "./hooks": {
-      "import": "./dist/hooks/index.js",
+      "import": "./dist/hooks/index.es.js",
       "types": "./dist/hooks/index.d.ts"
     },
     "./services": {
-      "import": "./dist/services/index.js",
+      "import": "./dist/services/index.es.js",
       "types": "./dist/services/index.d.ts"
     },
     "./types": {
-      "import": "./dist/types/index.js",
+      "import": "./dist/types/index.es.js",
       "types": "./dist/types/index.d.ts"
+    },
+    "./dist/cursor-sprint-templates.css": {
+      "import": "./dist/cursor-sprint-templates.css"
     }
   },
   "files": [
