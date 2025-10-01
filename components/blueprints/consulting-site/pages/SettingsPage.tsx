@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from "react";
-import { Button, InputField, FormGroup, Toast, Modal } from "@ffx/components";
+import { Button, InputField, FormGroup, Toast, Modal } from "../../../";
 import type { PageProps, SettingsFormData } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>

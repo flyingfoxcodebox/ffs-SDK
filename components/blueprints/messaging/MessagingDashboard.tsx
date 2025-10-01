@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Button, Toast } from "@ffx/components/ui";
+import { Button, Toast } from "../../ui";
 import {
   MessageComposer,
   ContactListUploader,

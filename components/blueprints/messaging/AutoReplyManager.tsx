@@ -1,11 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import {
-  Button,
-  InputField,
-  FormGroup,
-  Modal,
-  Toast,
-} from "@ffx/components/ui";
+import { Button, InputField, FormGroup, Modal, Toast } from "../../ui";
 import type { AutoReplyManagerProps, AutoReply } from "./types";
 
 /**

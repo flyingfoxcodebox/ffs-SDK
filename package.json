@@ -8,34 +8,41 @@
   "exports": {
     ".": {
       "import": "./dist/index/index.es.js",
-      "types": "./dist/index.d.ts"
+      "types": "./index.ts"
     },
     "./components": {
       "import": "./dist/components/index.es.js",
-      "types": "./dist/components/index.d.ts"
+      "types": "./components/index.ts"
     },
     "./blueprints": {
       "import": "./dist/blueprints/index.es.js",
-      "types": "./dist/blueprints/index.d.ts"
+      "types": "./components/blueprints/index.ts"
     },
     "./hooks": {
       "import": "./dist/hooks/index.es.js",
-      "types": "./dist/hooks/index.d.ts"
+      "types": "./hooks/index.ts"
     },
     "./services": {
       "import": "./dist/services/index.es.js",
-      "types": "./dist/services/index.d.ts"
+      "types": "./services/index.ts"
     },
     "./types": {
       "import": "./dist/types/index.es.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./types/index.ts"
     },
     "./dist/cursor-sprint-templates.css": {
       "import": "./dist/cursor-sprint-templates.css"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "index.ts",
+    "components",
+    "hooks",
+    "services",
+    "types",
+    "integrations",
+    "src"
   ],
   "scripts": {
     "dev": "vite build --watch",

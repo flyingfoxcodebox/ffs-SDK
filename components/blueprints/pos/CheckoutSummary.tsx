@@ -6,11 +6,11 @@
  */
 
 import React, { useState } from "react";
-import Button from "@ffx/components/ui/Button";
-import InputField from "@ffx/components/ui/InputField";
-import FormGroup from "@ffx/components/ui/FormGroup";
-import Modal from "@ffx/components/ui/Modal";
-import Spinner from "@ffx/components/ui/Spinner";
+import Button from "../../ui/Button";
+import InputField from "../../ui/InputField";
+import FormGroup from "../../ui/FormGroup";
+import Modal from "../../ui/Modal";
+import Spinner from "../../ui/Spinner";
 import { CheckoutSummaryProps, CustomerInfo } from "./types";
 
 const cx = (...classes: (string | undefined | null | false)[]) =>

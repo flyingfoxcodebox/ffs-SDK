@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Modal, Button, Toast } from "@ffx/components/ui";
+import { Modal, Button, Toast } from "../../ui";
 import type { MessagePreviewModalProps, Message, Contact } from "./types";
 
 /**

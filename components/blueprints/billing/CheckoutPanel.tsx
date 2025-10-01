@@ -1,11 +1,5 @@
 import React, { useState, useCallback } from "react";
-import {
-  InputField,
-  Button,
-  Toast,
-  FormGroup,
-  Modal,
-} from "@ffx/components/ui";
+import { InputField, Button, Toast, FormGroup, Modal } from "../../ui";
 
 /**
  * CheckoutPanel (Blueprint Component)

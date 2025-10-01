@@ -6,9 +6,9 @@
  */
 
 import React, { useState } from "react";
-import Button from "@ffx/components/ui/Button";
-import InputField from "@ffx/components/ui/InputField";
-import Spinner from "@ffx/components/ui/Spinner";
+import Button from "../../ui/Button";
+import InputField from "../../ui/InputField";
+import Spinner from "../../ui/Spinner";
 import { ProductListProps, Product } from "./types";
 
 const cx = (...classes: (string | undefined | null | false)[]) =>

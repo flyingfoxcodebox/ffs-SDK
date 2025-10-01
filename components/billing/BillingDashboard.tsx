@@ -7,8 +7,8 @@ import {
   SubscriptionStatusBanner,
   useBillingData,
   BillingSubscriptionPlan,
-} from "@ffx/components/billing";
-import { Toast } from "@ffx/components/ui";
+} from "./index";
+import { Toast } from "../ui";
 
 /**
  * BillingDashboard Component

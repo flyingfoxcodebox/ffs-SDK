@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { InputField, Button, Toast, FormGroup } from "@ffx/components/ui";
+import { InputField, Button, Toast, FormGroup } from "../../ui";
 
 /**
  * AuthPanel (Blueprint Component)

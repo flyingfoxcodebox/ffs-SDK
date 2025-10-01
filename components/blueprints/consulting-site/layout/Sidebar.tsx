@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { Button } from "@ffx/components";
+import { Button } from "../../../";
 import type { SidebarProps, NavigationItem } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>

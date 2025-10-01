@@ -6,8 +6,8 @@
  */
 
 import React, { useState } from "react";
-import POSDashboard from "@ffx/components/blueprints/pos/POSDashboard";
-import { Button, Toast } from "@ffx/components";
+import POSDashboard from "../../pos/POSDashboard";
+import { Button, Toast } from "../../../";
 import type { PageProps } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>

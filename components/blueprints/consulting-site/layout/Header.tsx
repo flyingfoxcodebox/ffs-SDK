@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from "react";
-import { Button, Modal } from "@ffx/components";
+import { Button, Modal } from "../../../";
 import type { HeaderProps } from "../types";
 
 export const Header: React.FC<HeaderProps> = ({

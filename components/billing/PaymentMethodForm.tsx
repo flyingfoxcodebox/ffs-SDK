@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { Button, InputField, FormGroup, Toast } from "@ffx/components/ui";
+import { Button, InputField, FormGroup, Toast } from "../ui";
 import { useBillingData } from "./hooks/useBillingData";
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { InputField, Button, FormGroup } from "@ffx/components/ui";
+import { InputField, Button, FormGroup } from "../../ui";
 import { slickTextService } from "./services/slicktext";
 import type {
   MessageComposerProps,

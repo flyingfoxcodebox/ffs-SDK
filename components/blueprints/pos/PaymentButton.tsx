@@ -6,9 +6,9 @@
  */
 
 import React, { useState } from "react";
-import Button from "@ffx/components/ui/Button";
-import Modal from "@ffx/components/ui/Modal";
-import Spinner from "@ffx/components/ui/Spinner";
+import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
+import Spinner from "../../ui/Spinner";
 import { PaymentButtonProps, PaymentMethod } from "./types";
 
 const cx = (...classes: (string | undefined | null | false)[]) =>

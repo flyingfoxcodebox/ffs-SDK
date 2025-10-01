@@ -6,10 +6,10 @@
  */
 
 import React, { useState } from "react";
-import MessagingDashboard from "@ffx/components/blueprints/messaging/MessagingDashboard";
-import { Toast } from "@ffx/components";
+import MessagingDashboard from "../../messaging/MessagingDashboard";
+import { Toast } from "../../../";
 import type { PageProps } from "../types";
-import type { SlickTextConfig } from "@ffx/types";
+import type { SlickTextConfig } from "../../../../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");

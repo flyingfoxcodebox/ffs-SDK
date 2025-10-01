@@ -6,8 +6,8 @@
  */
 
 import React, { useState } from "react";
-import Button from "@ffx/components/ui/Button";
-import Toast from "@ffx/components/ui/Toast";
+import Button from "../../ui/Button";
+import Toast from "../../ui/Toast";
 import {
   POSDashboardProps,
   Product,

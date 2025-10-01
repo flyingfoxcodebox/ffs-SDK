@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@ffx/components/ui";
+import { Button } from "../ui";
 import { useBillingData } from "./hooks/useBillingData";
 
 /**

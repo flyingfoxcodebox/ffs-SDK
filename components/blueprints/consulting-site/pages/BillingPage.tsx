@@ -6,9 +6,9 @@
  */
 
 import React, { useState } from "react";
-import BillingDashboard from "@ffx/components/billing/BillingDashboard";
-import CheckoutPanel from "@ffx/components/blueprints/billing/CheckoutPanel";
-import { Button, Toast } from "@ffx/components";
+import BillingDashboard from "../../../billing/BillingDashboard";
+import CheckoutPanel from "../../billing/CheckoutPanel";
+import { Button, Toast } from "../../../";
 import type { PageProps, ConsultingSubscriptionPlan } from "../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>

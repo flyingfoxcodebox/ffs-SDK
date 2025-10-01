@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Button, Spinner, Toast } from "@ffx/components/ui";
+import { Button, Spinner, Toast } from "../../ui";
 import type { MessageHistoryProps, Campaign, DeliveryStats } from "./types";
 
 /**
