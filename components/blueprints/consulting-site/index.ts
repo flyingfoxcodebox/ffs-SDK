@@ -4,8 +4,8 @@
  * Main export for the consulting site archetype.
  */
 
-// Main component
-export { ConsultingSite } from "./ConsultingSite";
+// Main component - use lazy loading for heavy consulting site
+export { LazyConsultingSiteWithSuspense as ConsultingSite } from "../../ui/LazyComponents";
 
 // Layout components
 export * from "./layout";

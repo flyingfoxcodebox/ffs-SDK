@@ -4,7 +4,7 @@ export type {
   TAuthPanelProps,
   LoginData,
   TLoginData,
-  SignUpData,
+  SignUpData as AuthSignUpData,
   TSignUpData,
   PasswordResetData,
   TPasswordResetData,

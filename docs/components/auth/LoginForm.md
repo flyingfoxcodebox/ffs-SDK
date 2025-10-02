@@ -37,9 +37,7 @@ className string ❌ — Additional Tailwind classes for the container.
 The LoginForm is designed to be used alongside SignUpForm and PasswordResetForm in a state-driven authentication flow. Here’s an example using useState to control which view is visible:
 
 import { useState } from "react";
-import { LoginForm, type HandleLogin } from "../components/auth";
-import SignUpForm from "../components/auth/SignUpForm";
-import PasswordResetForm from "../components/auth/PasswordResetForm";
+import { LoginForm, SignUpForm, PasswordResetForm } from "@ffx/sdk";
 
 const handleLogin: HandleLogin = async (email, password) => {
 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -59,6 +57,7 @@ export default function AuthPage() {
 const [view, setView] = useState<"login" | "signup" | "reset">("login");
 
 return (
+
 <main className="min-h-screen grid place-items-center bg-gray-100 dark:bg-gray-950 p-6">
 {view === "login" && (
 <LoginForm

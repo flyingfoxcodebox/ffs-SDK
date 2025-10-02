@@ -14,7 +14,7 @@ import React, { useId } from "react";
  * - Ensure proper accessibility with ARIA attributes
  *
  * How to reuse:
- * 1) Import it: `import FormGroup from "@ffx/components/ui/FormGroup";`
+ * 1) Import it: `import { FormGroup } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <FormGroup
  *      label="Email Address"

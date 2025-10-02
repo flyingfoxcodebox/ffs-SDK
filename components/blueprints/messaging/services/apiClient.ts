@@ -8,7 +8,7 @@
 import type {
   Campaign,
   AutoReply,
-  SendMessageRequest,
+  MessagingSendMessageRequest,
   SendMessageResponse,
   SubscribeContactRequest,
   SubscribeContactResponse,
@@ -153,7 +153,9 @@ export class MessagingApiClient {
   /**
    * Send a message
    */
-  async sendMessage(request: SendMessageRequest): Promise<SendMessageResponse> {
+  async sendMessage(
+    request: MessagingSendMessageRequest
+  ): Promise<SendMessageResponse> {
     const response = await this.makeRequest<{ result: SendMessageResponse }>(
       "/test/slicktext/send",
       {
@@ -395,7 +397,7 @@ export const messagingApiClient = new MessagingApiClient();
 export const getServiceStatus = () => messagingApiClient.getServiceStatus();
 export const switchMode = (mode: "mock" | "real") =>
   messagingApiClient.switchMode(mode);
-export const sendMessage = (request: SendMessageRequest) =>
+export const sendMessage = (request: MessagingSendMessageRequest) =>
   messagingApiClient.sendMessage(request);
 export const subscribeContact = (request: SubscribeContactRequest) =>
   messagingApiClient.subscribeContact(request);

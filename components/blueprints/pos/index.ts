@@ -5,11 +5,14 @@
  */
 
 // Main Components
-export { default as POSDashboard } from "./POSDashboard";
 export { default as ProductList } from "./ProductList";
 export { default as Cart } from "./Cart";
 export { default as CheckoutSummary } from "./CheckoutSummary";
 export { default as PaymentButton } from "./PaymentButton";
+
+// Heavy components - use lazy loading
+export { LazyPOSDashboardWithSuspense as POSDashboard } from "../../ui/LazyComponents";
+export { LazyInventoryManagerWithSuspense as InventoryManager } from "../../ui/LazyComponents";
 
 // Hooks
 export * from "./hooks";

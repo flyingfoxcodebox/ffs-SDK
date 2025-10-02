@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import MessagingDashboard from "../../messaging/MessagingDashboard";
 import { Toast } from "../../../";
 import type { PageProps } from "../types";
-import type { SlickTextConfig } from "../../../../types";
+import type { MessagingSlickTextConfig } from "../../../../types";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -29,7 +29,7 @@ export const MessagingPage: React.FC<PageProps> = ({
   >([]);
 
   // Mock SlickText configuration
-  const slickTextConfig: SlickTextConfig = {
+  const slickTextConfig: MessagingSlickTextConfig = {
     apiKey: "demo_public_key", // This is actually the public key for API v2
     accountId: "demo_brand_123", // This is actually the brand ID for API v2
     baseUrl: "https://dev.slicktext.com/v1",
@@ -52,7 +52,7 @@ export const MessagingPage: React.FC<PageProps> = ({
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
-  const handleConfigUpdate = (newConfig: SlickTextConfig) => {
+  const handleConfigUpdate = (newConfig: MessagingSlickTextConfig) => {
     console.log("SlickText config updated:", newConfig);
     addToast("Messaging configuration updated successfully", "success");
   };

@@ -1,21 +1,45 @@
-import { useState } from "react";
-import { Button, InputField, Modal } from "@ffx/cursor-sprint-templates";
-import { SupabaseIntegration } from "@ffx/cursor-sprint-templates/services";
+import React, { useState } from "react";
+import { Button, InputField, Modal } from "@ffx/sdk";
+import { SupabaseIntegration } from "@ffx/sdk/services";
 import "./App.css";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [supabaseStatus, setSupabaseStatus] = useState<string>("Not tested");
 
-  // Test service usage
+  // Test service usage with real Supabase integration
   const supabase = new SupabaseIntegration({
-    url: "https://example.supabase.co",
-    key: "test-key",
+    url: "https://demo.supabase.co", // Demo URL for testing
+    anonKey: "demo-key", // Demo key for testing
   });
 
   const handleButtonClick = () => {
     console.log("Button clicked!");
     setShowModal(true);
+  };
+
+  const testSupabaseConnection = async () => {
+    setSupabaseStatus("Testing connection...");
+    try {
+      const connectionInfo = supabase.getConnectionInfo();
+      console.log("Supabase connection info:", connectionInfo);
+
+      // Test health check (this will likely fail with demo credentials, but that's expected)
+      const healthCheck = await supabase.healthCheck();
+      console.log("Supabase health check:", healthCheck);
+
+      if (healthCheck.healthy) {
+        setSupabaseStatus("✅ Connected successfully!");
+      } else {
+        setSupabaseStatus(
+          "⚠️ Connection failed (expected with demo credentials)"
+        );
+      }
+    } catch (error) {
+      console.error("Supabase test error:", error);
+      setSupabaseStatus("❌ Error during test");
+    }
   };
 
   return (
@@ -81,17 +105,39 @@ function App() {
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Service Usage</h2>
 
-            <div className="space-y-2">
-              <p>
-                Supabase Service: {supabase ? "Initialized" : "Not initialized"}
-              </p>
-              <Button
-                variant="ghost"
-                onClick={() => console.log("Supabase:", supabase)}
-                size="sm"
-              >
-                Log Service
-              </Button>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Supabase Service:{" "}
+                  {supabase ? "Initialized" : "Not initialized"}
+                </p>
+                <p className="text-sm font-medium">Status: {supabaseStatus}</p>
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  variant="primary"
+                  onClick={testSupabaseConnection}
+                  size="sm"
+                >
+                  Test Connection
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => console.log("Supabase:", supabase)}
+                  size="sm"
+                >
+                  Log Service
+                </Button>
+              </div>
+
+              <div className="text-xs text-gray-500 mt-2">
+                <p>
+                  The connection test uses demo credentials and is expected to
+                  fail.
+                </p>
+                <p>Check the browser console for detailed logs.</p>
+              </div>
             </div>
           </div>
         </div>

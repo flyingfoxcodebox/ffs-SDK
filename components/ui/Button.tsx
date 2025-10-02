@@ -15,7 +15,7 @@ import Spinner from "./Spinner";
  * - Any interactive UI element requiring a button
  *
  * How to reuse:
- * 1) Import it: `import Button from "@ffx/components/ui/Button";`
+ * 1) Import it: `import { Button } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <Button
  *      variant="primary"
@@ -34,7 +34,12 @@ import Spinner from "./Spinner";
  * - Responsive design with mobile-first approach
  */
 
-export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "ghost"
+  | "outline";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps
@@ -86,6 +91,7 @@ const getSpinnerColor = (
     case "secondary":
       return "primary";
     case "ghost":
+    case "outline":
       return "gray";
     default:
       return "primary";
@@ -131,6 +137,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
       "disabled:text-gray-400 disabled:cursor-not-allowed",
       "dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+    ),
+    outline: cx(
+      "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
+      "disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed",
+      "dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-800"
     ),
   };
 

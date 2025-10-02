@@ -16,6 +16,7 @@
     "isolatedModules": true,
     "noEmit": false,
     "declaration": true,
+    "declarationDir": "./dist",
     "declarationMap": true,
     "outDir": "./dist",
     "rootDir": ".",
@@ -27,6 +28,12 @@
     }
   },
   "include": [
+    "index.ts",
+    "components/index.ts",
+    "hooks/index.ts",
+    "services/index.ts",
+    "types/index.ts",
+    "components/blueprints/index.ts",
     "src",
     "components",
     "integrations",

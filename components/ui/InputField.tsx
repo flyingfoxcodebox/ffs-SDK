@@ -14,7 +14,7 @@ import React, { useId, forwardRef } from "react";
  * - Any form requiring user input
  *
  * How to reuse:
- * 1) Import it: `import InputField from "@ffx/components/ui/InputField";`
+ * 1) Import it: `import { InputField } from "@ffx/sdk";`
  * 2) Use it in any form:
  *    <InputField
  *      type="email"
@@ -36,7 +36,7 @@ import React, { useId, forwardRef } from "react";
 export interface InputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Label text for the input field */
-  label: string;
+  label?: string;
   /** Error message to display below the input */
   error?: string;
   /** Helper text to display below the input (when no error) */
@@ -83,21 +83,23 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     return (
       <div className={cx("w-full", className)}>
         {/* ✅ Properly labeled form field */}
-        <label
-          htmlFor={inputId}
-          className="block text-sm font-medium text-gray-900 dark:text-gray-100"
-        >
-          {label}
-          {/* ✅ Required indicator if required prop is present */}
-          {rest.required && (
-            <span
-              className="ml-1 text-red-500 dark:text-red-400"
-              aria-label="required"
-            >
-              *
-            </span>
-          )}
-        </label>
+        {label && (
+          <label
+            htmlFor={inputId}
+            className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+          >
+            {label}
+            {/* ✅ Required indicator if required prop is present */}
+            {rest.required && (
+              <span
+                className="ml-1 text-red-500 dark:text-red-400"
+                aria-label="required"
+              >
+                *
+              </span>
+            )}
+          </label>
+        )}
 
         {/* ✅ Input element with full accessibility support */}
         <input

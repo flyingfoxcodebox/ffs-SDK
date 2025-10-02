@@ -4,7 +4,9 @@ export { default as ContactListUploader } from "./ContactListUploader";
 export { default as MessagePreviewModal } from "./MessagePreviewModal";
 export { default as MessageHistory } from "./MessageHistory";
 export { default as AutoReplyManager } from "./AutoReplyManager";
-export { default as MessagingDashboard } from "./MessagingDashboard";
+
+// Heavy components - use lazy loading
+export { LazyMessagingDashboardWithSuspense as MessagingDashboard } from "../../ui/LazyComponents";
 
 // ✅ Types
 export type {
@@ -12,7 +14,7 @@ export type {
   Contact,
   Campaign,
   MessageSegment,
-  SlickTextConfig,
+  MessagingSlickTextConfig,
   MessageComposerProps,
   ContactListUploaderProps,
   MessagePreviewModalProps,
