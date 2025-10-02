@@ -46,3 +46,27 @@ export type {
   SendMessageRequest,
   SubscribeContactRequest,
 } from "../components/blueprints/messaging/types";
+
+// Supabase integration types
+export type {
+  SupabaseConfig,
+  SupabaseCustomer,
+  AuthResult,
+  SignUpData,
+  SignInData,
+  ResetPasswordData,
+  SupabaseError,
+  DatabaseValue,
+  DatabaseTable,
+} from "../integrations/supabase";
+
+// Stripe integration types
+export type {
+  StripeConfig,
+  StripeCustomer,
+  StripePaymentIntent,
+  StripeSubscription,
+  CreatePaymentIntentRequest,
+  CreateCustomerRequest,
+  StripeWebhookEvent,
+} from "../integrations/stripe";
