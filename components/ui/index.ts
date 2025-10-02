@@ -17,15 +17,8 @@ export type { FormGroupProps, TFormGroupProps } from "./FormGroup";
 export { default as Toast } from "./Toast";
 export type { ToastProps, TToastProps } from "./Toast";
 
-// Advanced UI Components
-export { default as DataTable } from "./DataTable";
+// Advanced UI Components - Use lazy loading for heavy components
 export { default as Navigation, useNavigation } from "./Navigation";
-export { default as Form, useForm } from "./Form";
-export {
-  default as ThemeProvider,
-  useTheme,
-  useThemeStyles,
-} from "./ThemeProvider";
 
 // Advanced component types
 export type {
@@ -54,15 +47,22 @@ export type {
   CustomColors,
 } from "./ThemeProvider";
 
-// Lazy-loaded components for performance
+// Lazy-loaded components for performance (preferred for heavy components)
 export {
   LazyDataTable,
   LazyForm,
-  LazyNavigation,
   LazyThemeProvider,
   LazyWrapper,
   LazyDataTableWithSuspense,
   LazyFormWithSuspense,
-  LazyNavigationWithSuspense,
   default as LazyComponents,
 } from "./LazyComponents";
+
+// Re-export heavy components as lazy by default
+export { LazyDataTableWithSuspense as DataTable } from "./LazyComponents";
+export { LazyFormWithSuspense as Form } from "./LazyComponents";
+export { LazyThemeProvider as ThemeProvider } from "./LazyComponents";
+
+// Export hooks separately to avoid static imports
+export { useForm } from "./Form";
+export { useTheme, useThemeStyles } from "./ThemeProvider";

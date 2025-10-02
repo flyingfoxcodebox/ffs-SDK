@@ -28,9 +28,9 @@ export {
 // ============================================================================
 
 // Export integration services
-export { default as HubSpotService } from "../integrations/hubspot";
-export { default as QuickBooksService } from "../integrations/quickbooks";
-export { default as XeroService } from "../integrations/xero";
+export { default as HubSpotIntegration } from "../integrations/hubspot";
+export { default as QuickBooksIntegration } from "../integrations/quickbooks";
+export { default as XeroIntegration } from "../integrations/xero";
 export { default as SlickTextIntegration } from "../integrations/slicktext";
 export { default as SquareIntegration } from "../integrations/square";
 export { default as StripeIntegration } from "../integrations/stripe";
@@ -77,3 +77,54 @@ export type {
   StripeInvoice,
   StripeTerminal,
 } from "../integrations/stripe";
+
+// HubSpot integration types
+export type {
+  HubSpotConfig,
+  HubSpotContact,
+  HubSpotCompany,
+  HubSpotDeal,
+  CreateContactRequest as HubSpotCreateContactRequest,
+  CreateCompanyRequest,
+  CreateDealRequest,
+  HubSpotWorkflow,
+  HubSpotAnalytics,
+} from "../integrations/hubspot";
+
+// Square integration types
+export type {
+  SquareConfig,
+  SquarePayment,
+  SquareCustomer,
+  SquareOrder,
+  SquareInventoryItem,
+  CreatePaymentRequest as SquareCreatePaymentRequest,
+  CreateCustomerRequest as SquareCreateCustomerRequest,
+  SquareTerminal,
+  SquareWebhookEvent,
+  SquareAnalytics,
+} from "../integrations/square";
+
+// QuickBooks integration types
+export type {
+  QuickBooksConfig,
+  QuickBooksCustomer,
+  QuickBooksInvoice,
+  QuickBooksItem,
+  CreateCustomerRequest as QuickBooksCreateCustomerRequest,
+  CreateInvoiceRequest as QuickBooksCreateInvoiceRequest,
+  CreateItemRequest,
+  QuickBooksAnalytics,
+} from "../integrations/quickbooks";
+
+// Xero integration types
+export type {
+  XeroConfig,
+  XeroContact,
+  XeroInvoice,
+  XeroItem,
+  CreateContactRequest as XeroCreateContactRequest,
+  CreateInvoiceRequest as XeroCreateInvoiceRequest,
+  CreateItemRequest as XeroCreateItemRequest,
+  XeroAnalytics,
+} from "../integrations/xero";

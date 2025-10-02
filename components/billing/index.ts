@@ -14,7 +14,8 @@ export type { InvoiceListProps } from "./InvoiceList";
 export { default as SubscriptionStatusBanner } from "./SubscriptionStatusBanner";
 export type { SubscriptionStatusBannerProps } from "./SubscriptionStatusBanner";
 
-export { default as BillingDashboard } from "./BillingDashboard";
+// Heavy component - use lazy loading
+export { LazyBillingDashboardWithSuspense as BillingDashboard } from "../ui/LazyComponents";
 export type { BillingDashboardProps } from "./BillingDashboard";
 
 // ✅ Utility Hooks
