@@ -33,7 +33,7 @@
  * ```
  */
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
 import Button from "./Button";
 import InputField from "./InputField";
 import Spinner from "./Spinner";
@@ -109,7 +109,7 @@ interface SortState {
 const cx = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
 
-export function DataTable<T = any>({
+export const DataTable = memo(function DataTable<T = any>({
   data,
   columns,
   loading = false,
@@ -457,7 +457,6 @@ export function DataTable<T = any>({
                           }))
                         }
                         placeholder={`Filter ${column.title.toLowerCase()}...`}
-                        size="sm"
                         className="w-full"
                       />
                     </div>
@@ -642,6 +641,6 @@ export function DataTable<T = any>({
       )}
     </div>
   );
-}
+});
 
 export default DataTable;

@@ -3,7 +3,7 @@ import { messagingApiClient } from "../services/apiClient";
 import type {
   Message,
   Campaign,
-  SendMessageRequest,
+  MessagingSendMessageRequest,
   SubscribeContactRequest,
 } from "../types";
 
@@ -38,7 +38,7 @@ export const useMessaging = () => {
 
   // Send message
   const sendMessage = useCallback(
-    async (request: SendMessageRequest) => {
+    async (request: MessagingSendMessageRequest) => {
       setLoading(true);
       setError(null);
 

@@ -16,7 +16,7 @@
     },
     "./blueprints": {
       "import": "./dist/blueprints/index.es.js",
-      "types": "./dist/components/blueprints/index.d.ts"
+      "types": "./dist/blueprints/index.d.ts"
     },
     "./hooks": {
       "import": "./dist/hooks/index.es.js",

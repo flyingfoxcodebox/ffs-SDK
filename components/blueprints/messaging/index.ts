@@ -12,7 +12,7 @@ export type {
   Contact,
   Campaign,
   MessageSegment,
-  SlickTextConfig,
+  MessagingSlickTextConfig,
   MessageComposerProps,
   ContactListUploaderProps,
   MessagePreviewModalProps,

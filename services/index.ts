@@ -42,15 +42,18 @@ export { default as SupabaseIntegration } from "../integrations/supabase";
 
 export type {
   SlickTextConfig,
-  SlickTextResponse,
+  SlickTextContact,
   SendMessageRequest,
-  SubscribeContactRequest,
-} from "../components/blueprints/messaging/types";
+  SlickTextCampaign,
+  SlickTextTemplate,
+  SlickTextAutomation,
+  SlickTextWebhookEvent,
+  SlickTextAnalytics,
+} from "../integrations/slicktext";
 
 // Supabase integration types
 export type {
   SupabaseConfig,
-  SupabaseCustomer,
   AuthResult,
   SignUpData,
   SignInData,
@@ -69,4 +72,8 @@ export type {
   CreatePaymentIntentRequest,
   CreateCustomerRequest,
   StripeWebhookEvent,
+  StripeProduct,
+  StripePrice,
+  StripeInvoice,
+  StripeTerminal,
 } from "../integrations/stripe";

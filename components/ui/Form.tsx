@@ -38,7 +38,7 @@
  * ```
  */
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, memo } from "react";
 import InputField from "./InputField";
 import Button from "./Button";
 
@@ -535,7 +535,6 @@ function FormField({
   const commonProps = {
     disabled: field.disabled,
     readOnly: field.readonly,
-    className: field.className,
     onBlur,
   };
 
@@ -751,7 +750,7 @@ export interface FormProps {
   children?: React.ReactNode;
 }
 
-export function Form({
+export const Form = memo(function Form({
   form,
   onSubmit,
   className,
@@ -806,8 +805,10 @@ export function Form({
             key={field.name}
             className={cx(
               "form-field",
-              layout === "grid" && field.width && `col-span-${field.width}`,
-              layout === "inline" && field.width && `w-${field.width}`
+              layout === "grid" && field.width
+                ? `col-span-${field.width}`
+                : false,
+              layout === "inline" && field.width ? `w-${field.width}` : false
             )}
           >
             <FormField
@@ -853,6 +854,6 @@ export function Form({
       )}
     </form>
   );
-}
+});
 
 export default Form;

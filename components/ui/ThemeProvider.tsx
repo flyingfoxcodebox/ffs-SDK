@@ -463,17 +463,23 @@ export function ThemeProvider({
       "--ffx-text-4xl": typography.fontSize!["4xl"],
 
       // Border radius
-      "--ffx-radius-sm": borderRadius!.sm,
-      "--ffx-radius-base": borderRadius!.base,
-      "--ffx-radius-lg": borderRadius!.lg,
-      "--ffx-radius-xl": borderRadius!.xl,
-      "--ffx-radius-full": borderRadius!.full,
+      "--ffx-radius-sm": borderRadius!.sm || "0.25rem",
+      "--ffx-radius-base": borderRadius!.base || "0.5rem",
+      "--ffx-radius-lg": borderRadius!.lg || "0.75rem",
+      "--ffx-radius-xl": borderRadius!.xl || "1rem",
+      "--ffx-radius-full": borderRadius!.full || "9999px",
 
       // Shadows
-      "--ffx-shadow-sm": shadows!.sm,
-      "--ffx-shadow-base": shadows!.base,
-      "--ffx-shadow-lg": shadows!.lg,
-      "--ffx-shadow-xl": shadows!.xl,
+      "--ffx-shadow-sm": shadows!.sm || "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "--ffx-shadow-base":
+        shadows!.base ||
+        "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+      "--ffx-shadow-lg":
+        shadows!.lg ||
+        "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "--ffx-shadow-xl":
+        shadows!.xl ||
+        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
 
       // Animations
       "--ffx-duration-fast": animations!.duration!.fast,
@@ -495,7 +501,9 @@ export function ThemeProvider({
   useEffect(() => {
     const root = document.documentElement;
     Object.entries(cssVariables).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
+      if (value) {
+        root.style.setProperty(key, value);
+      }
     });
 
     // Apply theme class to body

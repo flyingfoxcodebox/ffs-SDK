@@ -510,7 +510,7 @@ export function InventoryManager({
       {/* Inventory Table */}
       <DataTable
         data={filteredItems}
-        columns={columns}
+        columns={columns as any}
         pagination={{ pageSize: 20, showSizeChanger: true, showTotal: true }}
         selection={{
           type: "multiple",

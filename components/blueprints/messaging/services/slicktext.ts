@@ -6,9 +6,9 @@
  */
 
 import type {
-  SlickTextConfig,
+  MessagingSlickTextConfig,
   SlickTextResponse,
-  SendMessageRequest,
+  MessagingSendMessageRequest,
   SendMessageResponse,
   Contact,
   Campaign,
@@ -43,23 +43,23 @@ interface SlickTextApiResponse<T = unknown> {
 }
 
 export class SlickTextService {
-  private config: SlickTextConfig;
+  private config: MessagingSlickTextConfig;
 
-  constructor(config: SlickTextConfig) {
+  constructor(config: MessagingSlickTextConfig) {
     this.config = config;
   }
 
   /**
    * Update SlickText configuration
    */
-  updateConfig(config: Partial<SlickTextConfig>): void {
+  updateConfig(config: Partial<MessagingSlickTextConfig>): void {
     this.config = { ...this.config, ...config };
   }
 
   /**
    * Get current configuration
    */
-  getConfig(): SlickTextConfig {
+  getConfig(): MessagingSlickTextConfig {
     return this.config;
   }
 
@@ -179,7 +179,7 @@ export class SlickTextService {
    * Send SMS message
    */
   async sendMessage(
-    request: SendMessageRequest
+    request: MessagingSendMessageRequest
   ): Promise<SlickTextResponse<SendMessageResponse>> {
     try {
       // For API v2, we need to send to a list rather than individual recipients

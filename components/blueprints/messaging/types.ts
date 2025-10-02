@@ -87,7 +87,8 @@ export interface DeliveryStats {
 }
 
 // ✅ SlickText API v2 Configuration
-export interface SlickTextConfig {
+// Note: SlickTextConfig is now imported from integrations/slicktext
+export interface MessagingSlickTextConfig {
   apiKey: string; // This will be the public key for API v2
   accountId: string; // This will be the brand ID for API v2
   baseUrl: string;
@@ -102,7 +103,7 @@ export interface SlickTextResponse<T = unknown> {
   message?: string;
 }
 
-export interface SendMessageRequest {
+export interface MessagingSendMessageRequest {
   message: string;
   recipients: string[];
   scheduledAt?: string;
@@ -254,8 +255,8 @@ export interface AutoReplyManagerProps {
 }
 
 export interface MessagingDashboardProps {
-  slickTextConfig?: SlickTextConfig;
-  onConfigUpdate?: (config: SlickTextConfig) => void;
+  slickTextConfig?: MessagingSlickTextConfig;
+  onConfigUpdate?: (config: MessagingSlickTextConfig) => void;
   className?: string;
 }
 

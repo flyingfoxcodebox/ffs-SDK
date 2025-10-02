@@ -56,9 +56,9 @@ export type {
   Contact,
   Campaign,
   MessageSegment,
-  SlickTextConfig,
+  MessagingSlickTextConfig,
   SlickTextResponse,
-  SendMessageRequest,
+  MessagingSendMessageRequest,
   SubscribeContactRequest,
   AutoReply,
   MessageComposerProps,
@@ -103,7 +103,7 @@ export type { CheckoutPanelProps } from "../components/blueprints/billing/Checko
 
 // Consulting Site Types
 export type {
-  NavigationItem,
+  NavigationItem as ConsultingNavigationItem,
   NavigationConfig,
   User,
   UserPreferences,

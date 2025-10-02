@@ -1,6 +1,6 @@
 /**
  * Flying Fox Solutions - Supabase Integration
- *
+ * 
  * A comprehensive wrapper around the Supabase client that provides
  * type-safe database operations, authentication, and real-time subscriptions.
  *

@@ -34,7 +34,10 @@ export type {
   DataTablePagination,
   DataTableSelection,
 } from "./DataTable";
-export type { NavigationProps, NavigationItem } from "./Navigation";
+export type {
+  NavigationProps,
+  NavigationItem as UINavigationItem,
+} from "./Navigation";
 export type {
   FormProps,
   FormFieldSchema,
@@ -50,3 +53,16 @@ export type {
   ColorMode,
   CustomColors,
 } from "./ThemeProvider";
+
+// Lazy-loaded components for performance
+export {
+  LazyDataTable,
+  LazyForm,
+  LazyNavigation,
+  LazyThemeProvider,
+  LazyWrapper,
+  LazyDataTableWithSuspense,
+  LazyFormWithSuspense,
+  LazyNavigationWithSuspense,
+  default as LazyComponents,
+} from "./LazyComponents";

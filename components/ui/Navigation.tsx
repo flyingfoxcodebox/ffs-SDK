@@ -374,7 +374,6 @@ export function Navigation({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={searchPlaceholder}
-            size="sm"
             className="w-full"
           />
         </div>

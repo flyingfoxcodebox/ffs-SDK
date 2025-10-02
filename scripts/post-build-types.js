@@ -69,3 +69,4 @@ export * from "./types";
 } else {
   console.log("✅ Root index.d.ts file already exists");
 }
+

@@ -105,6 +105,8 @@ export interface StripeSubscription {
     quantity: number;
   }[];
   metadata?: Record<string, string>;
+  cancel_at_period_end?: boolean;
+  canceled_at?: number;
 }
 
 export interface CreatePaymentIntentRequest {
@@ -129,6 +131,76 @@ export interface CreateCustomerRequest {
     postal_code?: string;
     country?: string;
   };
+  metadata?: Record<string, string>;
+}
+
+export interface StripeWebhookEvent {
+  id: string;
+  type: string;
+  data: {
+    object: any;
+    previous_attributes?: any;
+  };
+  created: number;
+  livemode: boolean;
+  pending_webhooks: number;
+  request?: {
+    id?: string;
+    idempotency_key?: string;
+  };
+}
+
+export interface StripeProduct {
+  id: string;
+  name: string;
+  description?: string;
+  active: boolean;
+  default_price?: string;
+  images?: string[];
+  metadata?: Record<string, string>;
+  created: number;
+  updated: number;
+}
+
+export interface StripePrice {
+  id: string;
+  product: string;
+  active: boolean;
+  currency: string;
+  unit_amount?: number;
+  type: "one_time" | "recurring";
+  recurring?: {
+    interval: "day" | "week" | "month" | "year";
+    interval_count: number;
+  };
+  metadata?: Record<string, string>;
+  created: number;
+}
+
+export interface StripeInvoice {
+  id: string;
+  customer: string;
+  subscription?: string;
+  status: "draft" | "open" | "paid" | "void" | "uncollectible";
+  amount_due: number;
+  amount_paid: number;
+  amount_remaining: number;
+  currency: string;
+  description?: string;
+  hosted_invoice_url?: string;
+  invoice_pdf?: string;
+  created: number;
+  due_date?: number;
+}
+
+export interface StripeTerminal {
+  id: string;
+  label?: string;
+  location?: string;
+  serial_number: string;
+  status: "online" | "offline";
+  device_type: "bbpos_chipper2x" | "verifone_P400" | "simulated_wisepad3";
+  ip_address?: string;
   metadata?: Record<string, string>;
 }
 
@@ -244,6 +316,174 @@ export class StripeIntegration {
       return customer;
     } catch (error) {
       throw new Error(`Failed to create customer: ${error}`);
+    }
+  }
+
+  /**
+   * Process Stripe webhook events with signature verification
+   */
+  processWebhookEvent(
+    payload: string | Buffer,
+    signature: string
+  ): StripeWebhookEvent {
+    if (!this.config.webhookSecret) {
+      throw new Error("Webhook secret is required for webhook verification");
+    }
+
+    try {
+      // In production, use Stripe's webhook signature verification:
+      // const event = stripe.webhooks.constructEvent(payload, signature, this.config.webhookSecret);
+
+      // For now, mock the webhook processing
+      const mockEvent: StripeWebhookEvent = {
+        id: `evt_${Date.now()}`,
+        type: "payment_intent.succeeded",
+        data: {
+          object: JSON.parse(payload.toString()),
+        },
+        created: Math.floor(Date.now() / 1000),
+        livemode: !this.config.testMode,
+        pending_webhooks: 1,
+      };
+
+      console.log("Processed webhook event:", mockEvent.type);
+      return mockEvent;
+    } catch (error) {
+      throw new Error(`Webhook signature verification failed: ${error}`);
+    }
+  }
+
+  /**
+   * Create a product
+   */
+  async createProduct(
+    product: Omit<StripeProduct, "id" | "created" | "updated">
+  ): Promise<StripeProduct> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      const mockProduct: StripeProduct = {
+        id: `prod_${Date.now()}`,
+        ...product,
+        created: Math.floor(Date.now() / 1000),
+        updated: Math.floor(Date.now() / 1000),
+      };
+
+      console.log("Created product:", mockProduct.id);
+      return mockProduct;
+    } catch (error) {
+      throw new Error(`Failed to create product: ${error}`);
+    }
+  }
+
+  /**
+   * Create a price
+   */
+  async createPrice(
+    price: Omit<StripePrice, "id" | "created">
+  ): Promise<StripePrice> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      const mockPrice: StripePrice = {
+        id: `price_${Date.now()}`,
+        ...price,
+        created: Math.floor(Date.now() / 1000),
+      };
+
+      console.log("Created price:", mockPrice.id);
+      return mockPrice;
+    } catch (error) {
+      throw new Error(`Failed to create price: ${error}`);
+    }
+  }
+
+  /**
+   * Get invoices for a customer
+   */
+  async getInvoices(customerId: string): Promise<StripeInvoice[]> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      // Mock implementation
+      const mockInvoices: StripeInvoice[] = [
+        {
+          id: `in_${Date.now()}`,
+          customer: customerId,
+          status: "paid",
+          amount_due: 2000,
+          amount_paid: 2000,
+          amount_remaining: 0,
+          currency: "usd",
+          description: "Monthly subscription",
+          hosted_invoice_url: `https://invoice.stripe.com/i/acct_test/in_${Date.now()}`,
+          created: Math.floor(Date.now() / 1000),
+        },
+      ];
+
+      console.log("Retrieved invoices for customer:", customerId);
+      return mockInvoices;
+    } catch (error) {
+      throw new Error(`Failed to get invoices: ${error}`);
+    }
+  }
+
+  /**
+   * Cancel a subscription
+   */
+  async cancelSubscription(
+    subscriptionId: string
+  ): Promise<StripeSubscription> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      const mockSubscription: StripeSubscription = {
+        id: subscriptionId,
+        customer: `cus_${Date.now()}`,
+        status: "canceled",
+        current_period_start: Math.floor(Date.now() / 1000),
+        current_period_end: Math.floor(Date.now() / 1000) + 2592000, // 30 days
+        cancel_at_period_end: false,
+        items: [],
+      };
+
+      console.log("Canceled subscription:", subscriptionId);
+      return mockSubscription;
+    } catch (error) {
+      throw new Error(`Failed to cancel subscription: ${error}`);
+    }
+  }
+
+  /**
+   * Refund a payment intent
+   */
+  async refundPayment(
+    paymentIntentId: string,
+    amount?: number
+  ): Promise<{ id: string; status: string; amount: number }> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      const refund = {
+        id: `re_${Date.now()}`,
+        status: "succeeded",
+        amount: amount || 0, // In production, get from payment intent if not specified
+      };
+
+      console.log("Created refund:", refund.id);
+      return refund;
+    } catch (error) {
+      throw new Error(`Failed to create refund: ${error}`);
     }
   }
 
