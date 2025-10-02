@@ -23,9 +23,9 @@ export interface PaymentMethodFormProps {
   /** Whether to show the cancel button */
   showCancelButton?: boolean;
   /** Callback when payment method is added */
-  onAddPaymentMethod?: (cardDetails: any) => Promise<void>;
+  onAddPaymentMethod?: (_cardDetails: any) => Promise<void>;
   /** Callback when payment method is updated */
-  onUpdatePaymentMethod?: (cardDetails: any) => Promise<void>;
+  onUpdatePaymentMethod?: (_cardDetails: any) => Promise<void>;
   /** Current payment method */
   currentPaymentMethod?: {
     id: string;

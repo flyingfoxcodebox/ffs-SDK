@@ -4,11 +4,11 @@
   "type": "module",
   "main": "./dist/index/index.es.js",
   "module": "./dist/index/index.es.js",
-  "types": "./dist/components/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index/index.es.js",
-      "types": "./dist/components/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./components": {
       "import": "./dist/components/index.es.js",
@@ -46,8 +46,8 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc && vite build --config vite.config.ts",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "vite build --config vite.config.ts && tsc --emitDeclarationOnly && node scripts/post-build-types.js",
+    "build:types": "tsc --emitDeclarationOnly && node scripts/post-build-types.js",
     "build:lib": "vite build",
     "lint": "eslint .",
     "clean": "rm -rf dist"

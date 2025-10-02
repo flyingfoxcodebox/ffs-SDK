@@ -61,26 +61,41 @@ export interface SupabaseConfig {
   };
 }
 
-export interface DatabaseTable<T = any> {
-  select: (columns?: string) => Promise<{ data: T[] | null; error: any }>;
+/** Supabase error interface */
+export interface SupabaseError {
+  message: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+}
+
+/** Database query value types */
+export type DatabaseValue = string | number | boolean | null | Date;
+
+export interface DatabaseTable<T = Record<string, unknown>> {
+  select: (
+    _columns?: string
+  ) => Promise<{ data: T[] | null; error: SupabaseError | null }>;
   insert: (
-    data: Partial<T> | Partial<T>[]
-  ) => Promise<{ data: T[] | null; error: any }>;
-  update: (data: Partial<T>) => Promise<{ data: T[] | null; error: any }>;
-  delete: () => Promise<{ data: T[] | null; error: any }>;
-  eq: (column: string, value: any) => DatabaseTable<T>;
-  neq: (column: string, value: any) => DatabaseTable<T>;
-  gt: (column: string, value: any) => DatabaseTable<T>;
-  gte: (column: string, value: any) => DatabaseTable<T>;
-  lt: (column: string, value: any) => DatabaseTable<T>;
-  lte: (column: string, value: any) => DatabaseTable<T>;
-  like: (column: string, pattern: string) => DatabaseTable<T>;
-  ilike: (column: string, pattern: string) => DatabaseTable<T>;
-  in: (column: string, values: any[]) => DatabaseTable<T>;
-  order: (column: string, ascending?: boolean) => DatabaseTable<T>;
-  limit: (count: number) => DatabaseTable<T>;
-  range: (from: number, to: number) => DatabaseTable<T>;
-  single: () => Promise<{ data: T | null; error: any }>;
+    _data: Partial<T> | Partial<T>[]
+  ) => Promise<{ data: T[] | null; error: SupabaseError | null }>;
+  update: (
+    _data: Partial<T>
+  ) => Promise<{ data: T[] | null; error: SupabaseError | null }>;
+  delete: () => Promise<{ data: T[] | null; error: SupabaseError | null }>;
+  eq: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  neq: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  gt: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  gte: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  lt: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  lte: (_column: string, _value: DatabaseValue) => DatabaseTable<T>;
+  like: (_column: string, _pattern: string) => DatabaseTable<T>;
+  ilike: (_column: string, _pattern: string) => DatabaseTable<T>;
+  in: (_column: string, _values: DatabaseValue[]) => DatabaseTable<T>;
+  order: (_column: string, _ascending?: boolean) => DatabaseTable<T>;
+  limit: (_count: number) => DatabaseTable<T>;
+  range: (_from: number, _to: number) => DatabaseTable<T>;
+  single: () => Promise<{ data: T | null; error: SupabaseError | null }>;
 }
 
 export interface AuthResult {
@@ -117,18 +132,22 @@ export interface ResetPasswordData {
  * with built-in error handling, logging, and TypeScript support.
  */
 export class SupabaseIntegration {
-  private client: any;
+  private client: ReturnType<typeof createClient>;
   private config: SupabaseConfig;
 
   constructor(config: SupabaseConfig) {
     this.config = config;
-    this.client = createClient(config.url, config.anonKey, config.options);
+    this.client = createClient(
+      config.url,
+      config.anonKey,
+      config.options as any
+    );
   }
 
   /**
    * Get the underlying Supabase client for advanced operations
    */
-  get supabase(): any {
+  get supabase(): ReturnType<typeof createClient> {
     return this.client;
   }
 
@@ -262,7 +281,7 @@ export class SupabaseIntegration {
   /**
    * Access a database table with a fluent interface
    */
-  from<T = any>(table: string): any {
+  from<T = Record<string, unknown>>(table: string): any {
     return this.client.from(table);
   }
 
@@ -271,10 +290,10 @@ export class SupabaseIntegration {
    */
   async rpc(
     functionName: string,
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   ): Promise<{ data: any; error: any }> {
     try {
-      const result = await this.client.rpc(functionName, params);
+      const result = await this.client.rpc(functionName, params as any);
 
       if (result.error) {
         console.error(
