@@ -15,7 +15,7 @@ import Spinner from "./Spinner";
  * - Any interactive UI element requiring a button
  *
  * How to reuse:
- * 1) Import it: `import Button from "@ffx/components/ui/Button";`
+ * 1) Import it: `import { Button } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <Button
  *      variant="primary"

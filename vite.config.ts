@@ -21,9 +21,11 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}/index.${format}.js`,
       formats: ["es"],
     },
+    cssCodeSplit: false,
     rollupOptions: {
       external: ["react", "react-dom"],
       output: {
+        assetFileNames: "sdk.css",
         globals: {
           react: "React",
           "react-dom": "ReactDOM",

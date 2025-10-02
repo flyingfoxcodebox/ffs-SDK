@@ -42,7 +42,7 @@ Button provides a consistent, accessible, and fully-featured interactive compone
 ### Basic Button
 
 ```tsx
-import Button from "@ffx/components/ui/Button";
+import { Button } from "@ffx/sdk";
 
 <Button onClick={() => console.log("Clicked!")}>Click me</Button>;
 ```
@@ -224,7 +224,7 @@ dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600
 
 ```tsx
 import { useForm } from "react-hook-form";
-import Button from "@ffx/components/ui/Button";
+import { Button } from "@ffx/sdk";
 
 function ContactForm() {
   const {

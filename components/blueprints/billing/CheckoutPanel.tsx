@@ -11,7 +11,7 @@ import { InputField, Button, Toast, FormGroup, Modal } from "../../ui";
  * into a production-ready subscription management experience that can be dropped into any project.
  *
  * How to reuse:
- * 1) Import it: `import CheckoutPanel from "@ffx/components/blueprints/billing/CheckoutPanel";`
+ * 1) Import it: `import { CheckoutPanel } from "@ffx/sdk/blueprints";`
  * 2) Use it anywhere:
  *    <CheckoutPanel
  *      plans={subscriptionPlans}

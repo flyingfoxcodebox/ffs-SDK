@@ -42,7 +42,7 @@ export * as types from "./types";
 // 🎯 Convenience Re-exports
 // ============================================================================
 
-// For direct imports without namespace (e.g., import { Button } from "@ffx/components")
+// For direct imports without namespace (e.g., import { Button } from "@ffx/sdk")
 export * from "./components";
 export * from "./hooks";
 export * from "./components/blueprints";

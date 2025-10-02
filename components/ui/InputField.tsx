@@ -14,7 +14,7 @@ import React, { useId, forwardRef } from "react";
  * - Any form requiring user input
  *
  * How to reuse:
- * 1) Import it: `import InputField from "@ffx/components/ui/InputField";`
+ * 1) Import it: `import { InputField } from "@ffx/sdk";`
  * 2) Use it in any form:
  *    <InputField
  *      type="email"

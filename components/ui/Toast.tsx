@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
  * - Warning alerts (important notices, caution messages)
  *
  * How to reuse:
- * 1) Import it: `import Toast from "@ffx/components/ui/Toast";`
+ * 1) Import it: `import { Toast } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <Toast
  *      message="Successfully saved your changes!"

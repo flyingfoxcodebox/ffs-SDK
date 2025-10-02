@@ -311,7 +311,7 @@ if (result.success) {
 ### React Hook Example
 
 ```typescript
-import { useMessaging } from "@ffx/components/blueprints/messaging";
+import { useMessaging } from "@ffx/sdk/hooks";
 
 function MyComponent() {
   const { sendMessage, subscribeContact, loading, error } = useMessaging();
@@ -338,10 +338,10 @@ function MyComponent() {
 ### Service Usage
 
 ```typescript
-import { slicktextService } from "@ffx/components/blueprints/messaging/services/slicktext";
+import { SlickTextIntegration } from "@ffx/sdk/services";
 
-// Configure the service
-slicktextService.configure({
+// Configure the service (placeholder - SlickText integration not yet implemented)
+const slicktext = new SlickTextIntegration({
   publicKey: process.env.REACT_APP_SLICKTEXT_PUBLIC_KEY!,
   privateKey: process.env.REACT_APP_SLICKTEXT_PRIVATE_KEY!,
   brandId: process.env.REACT_APP_SLICKTEXT_BRAND_ID!,
@@ -349,8 +349,8 @@ slicktextService.configure({
   sandboxMode: process.env.NODE_ENV !== "production",
 });
 
-// Use the service
-const result = await slicktextService.sendMessage("list_123", "Hello!");
+// Use the service (will be available when SlickText integration is implemented)
+// const result = await slicktext.sendMessage("list_123", "Hello!");
 ```
 
 ## Testing

@@ -14,7 +14,7 @@ import React, { useEffect, useRef, forwardRef } from "react";
  * - Any overlay content requiring user attention
  *
  * How to reuse:
- * 1) Import it: `import Modal from "@ffx/components/ui/Modal";`
+ * 1) Import it: `import { Modal } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <Modal
  *      isOpen={isModalOpen}

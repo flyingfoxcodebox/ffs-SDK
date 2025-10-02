@@ -14,7 +14,7 @@ import React from "react";
  * - Any UI element requiring loading feedback
  *
  * How to reuse:
- * 1) Import it: `import Spinner from "@ffx/components/ui/Spinner";`
+ * 1) Import it: `import { Spinner } from "@ffx/sdk";`
  * 2) Use it anywhere:
  *    <Spinner size="md" color="primary" aria-label="Loading content" />
  *

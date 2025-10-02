@@ -11,7 +11,7 @@ import { InputField, Button, Toast, FormGroup } from "../../ui";
  * into a production-ready authentication experience that can be dropped into any project.
  *
  * How to reuse:
- * 1) Import it: `import AuthPanel from "@ffx/components/blueprints/auth/AuthPanel";`
+ * 1) Import it: `import { AuthPanel } from "@ffx/sdk/blueprints";`
  * 2) Use it anywhere:
  *    <AuthPanel
  *      onLogin={(data) => handleLogin(data)}
